@@ -990,10 +990,13 @@
       }
     }
 
-    @media (max-width: 980px) {
+    @media (hover: none), (pointer: coarse) {
       body { cursor: auto; }
       a, button, .work-card, .filter-pill, .subfilter-pill { cursor: pointer; }
       .cursor-dot, .cursor-ring { display: none; }
+    }
+
+    @media (max-width: 980px) {
       .hero-grid,
       .about-grid {
         grid-template-columns: 1fr;
@@ -1333,12 +1336,12 @@
       3: {
         title: 'Playtime Rewards',
         desc: 'A custom scripted Roblox system shown through gameplay footage.'
-      }
+      },
       4: {
         title: 'Wheel Spinning + Rewards',
         desc: 'A custom scripted Roblox system shown through gameplay footage.'
-      }
-      3: {
+      },
+      5: {
         title: 'Explosion System',
         desc: 'A custom scripted Roblox system shown through gameplay footage.'
       }
