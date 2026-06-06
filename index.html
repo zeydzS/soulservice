@@ -1492,6 +1492,13 @@
       scripting: 40
     };
 
+    // Performance controls:
+    // Stops scanning after several missing files in a row so the site does not waste time checking hundreds of nonexistent files.
+    const MAX_CONSECUTIVE_MISSES = 5;
+
+    // The overview section is a preview. Full category sections still show all loaded work.
+    const OVERVIEW_MAX_ITEMS = 12;
+
 
        const SCRIPTING_DETAILS = {
       1: {
@@ -1732,7 +1739,7 @@
         };
         img.onload = () => finish(true);
         img.onerror = () => finish(false);
-        setTimeout(() => finish(false), 5000);
+        setTimeout(() => finish(false), 2200);
         img.src = path;
       });
     }
@@ -1752,52 +1759,81 @@
         video.muted = true;
         video.onloadedmetadata = () => finish(true);
         video.onerror = () => finish(false);
-        setTimeout(() => finish(false), 6000);
+        setTimeout(() => finish(false), 2500);
         video.src = path;
         video.load();
       });
     }
 
+    async function checkAsset(path, mediaType) {
+      // On hosted sites like GitHub Pages, HEAD checks are faster than loading media.
+      // On local file previews, browsers may block fetch(), so the code falls back to media checks.
+      if (window.location.protocol !== 'file:') {
+        try {
+          const response = await fetch(path, { method: 'HEAD', cache: 'force-cache' });
+          if (response.ok) return true;
+          if (response.status === 404) return false;
+        } catch (_) {
+          // Fall back below.
+        }
+      }
+
+      return mediaType === 'video' ? checkVideo(path) : checkImage(path);
+    }
+
+    function makePortfolioItem(group, number, src) {
+      const customDetails = group.key === 'scripting' ? SCRIPTING_DETAILS[number] : null;
+      const customTitle = customDetails && customDetails.title ? customDetails.title : null;
+      const customDesc = customDetails && customDetails.desc ? customDetails.desc : null;
+
+      return {
+        id: `${group.key}-${number}`,
+        number,
+        src,
+        category: group.category,
+        modelStyle: group.modelStyle,
+        mediaType: group.mediaType,
+        icon: group.icon,
+        tag: group.tag,
+        title: customTitle || `${group.titlePrefix} ${padNumber(number)}`,
+        desc: customDesc || group.desc,
+        mediaClass: group.mediaClass
+      };
+    }
+
     async function discoverAssets() {
       const discovered = [];
+      const overviewLoading = document.getElementById('overviewLoading');
 
       for (const group of ASSET_GROUPS) {
         const limit = SCAN_LIMITS[group.key] || 30;
-        const checks = Array.from({ length: limit }, (_, index) => {
-          const number = index + 1;
+        let consecutiveMisses = 0;
+
+        for (let number = 1; number <= limit; number++) {
           const src = group.path(number);
-          const checker = group.mediaType === 'video' ? checkVideo : checkImage;
-          return checker(src).then(exists => {
-            if (!exists) return null;
+          const exists = await checkAsset(src, group.mediaType);
 
-            const customDetails = group.key === 'scripting' ? SCRIPTING_DETAILS[number] : null;
-            const customTitle = customDetails && customDetails.title ? customDetails.title : null;
-            const customDesc = customDetails && customDetails.desc ? customDetails.desc : null;
+          if (!exists) {
+            consecutiveMisses += 1;
+            if (consecutiveMisses >= MAX_CONSECUTIVE_MISSES) break;
+            continue;
+          }
 
-            return {
-              id: `${group.key}-${number}`,
-              number,
-              src,
-              category: group.category,
-              modelStyle: group.modelStyle,
-              mediaType: group.mediaType,
-              icon: group.icon,
-              tag: group.tag,
-              title: customTitle || `${group.titlePrefix} ${padNumber(number)}`,
-              desc: customDesc || group.desc,
-              mediaClass: group.mediaClass
-            };
-          });
-        });
+          consecutiveMisses = 0;
+          discovered.push(makePortfolioItem(group, number, src));
+        }
 
-        const foundInGroup = await Promise.all(checks);
-        discovered.push(...foundInGroup.filter(Boolean));
+        // Render category-by-category so visitors see content sooner.
+        state.items = [...discovered];
+        renderAllGalleries();
+        updateStats(false);
+        await new Promise(resolve => requestAnimationFrame(resolve));
       }
 
       state.items = discovered;
       renderAllGalleries();
-      updateStats();
-      document.getElementById('overviewLoading').classList.remove('show');
+      updateStats(true);
+      if (overviewLoading) overviewLoading.classList.remove('show');
     }
 
     function createCard(item, wide = false) {
@@ -1817,18 +1853,8 @@
       card.appendChild(mediaBg);
 
       if (item.mediaType === 'video') {
-        const video = document.createElement('video');
-        video.className = 'work-video';
-        video.src = item.src;
-        video.muted = true;
-        video.loop = true;
-        video.playsInline = true;
-        video.preload = 'metadata';
-        video.addEventListener('loadeddata', () => card.classList.add('video-loaded'));
-        video.addEventListener('mouseenter', () => video.play().catch(() => {}));
-        card.addEventListener('mouseenter', () => video.play().catch(() => {}));
-        card.addEventListener('mouseleave', () => video.pause());
-        card.appendChild(video);
+        // Do not load MP4 files inside the grid. Videos load only after the card is clicked.
+        card.classList.add('video-loaded');
 
         const playBadge = document.createElement('div');
         playBadge.className = 'play-badge';
@@ -1840,6 +1866,7 @@
         image.src = item.src;
         image.alt = `${item.title} portfolio image`;
         image.loading = 'lazy';
+        image.decoding = 'async';
         image.onload = () => card.classList.add('image-loaded');
         image.onerror = () => image.remove();
         card.appendChild(image);
@@ -1902,7 +1929,7 @@
       const highPolyItems = state.items
         .filter(item => item.category === 'model' && item.modelStyle === 'high')
         .sort((a, b) => a.number - b.number)
-        .slice(0, 8);
+        .slice(0, 4);
 
       if (heroSlideTimer) {
         clearInterval(heroSlideTimer);
@@ -1934,6 +1961,8 @@
         bg.className = 'hero-slide-bg';
         bg.src = item.src;
         bg.alt = '';
+        bg.loading = 'lazy';
+        bg.decoding = 'async';
         bg.setAttribute('aria-hidden', 'true');
         slide.appendChild(bg);
 
@@ -1941,6 +1970,8 @@
         main.className = 'hero-slide-main';
         main.src = item.src;
         main.alt = `${item.title} preview`;
+        main.loading = index === 0 ? 'eager' : 'lazy';
+        main.decoding = 'async';
         slide.appendChild(main);
 
         const label = document.createElement('div');
@@ -2000,8 +2031,9 @@
         visible = visible.filter(item => item.modelStyle === state.overviewModelStyle);
       }
 
-      visible.forEach(item => overviewGrid.appendChild(createCard(item, false)));
-      overviewEmpty.classList.toggle('show', visible.length === 0);
+      const hasVisibleItems = visible.length > 0;
+      visible.slice(0, OVERVIEW_MAX_ITEMS).forEach(item => overviewGrid.appendChild(createCard(item, false)));
+      overviewEmpty.classList.toggle('show', !hasVisibleItems);
     }
 
     function updateStats() {
@@ -2124,7 +2156,7 @@
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
     const particles = [];
-    const particleCount = 76;
+    const particleCount = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 38;
 
     function resizeCanvas() {
       canvas.width = window.innerWidth * window.devicePixelRatio;
