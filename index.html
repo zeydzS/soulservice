@@ -1,545 +1,1588 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>YOUR_NAME.exe — Roblox Model</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-<style>
-/* ── TOKENS ─────────────────────────────── */
-:root{
-  --bg:#030508;
-  --surf:#07090f;
-  --text:#9cbdd4;
-  --muted:#2d4a5e;
-  --cyan:#00d9ff;
-  --purple:#9d5cff;
-  --lc:rgba(0,217,255,.09);
-  --gC:rgba(0,217,255,.18);
-  --gP:rgba(157,92,255,.14);
-  --ease:cubic-bezier(.25,.46,.45,.94);
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zeyd | Creative Portfolio</title>
+  <meta name="description" content="Portfolio showcasing 3D models, UI elements, and GFX work." />
+  <style>
+    :root {
+      --bg: #060816;
+      --bg-soft: #0b1024;
+      --card: rgba(255, 255, 255, 0.075);
+      --card-strong: rgba(255, 255, 255, 0.12);
+      --text: #f4f7fb;
+      --muted: #9ca9c4;
+      --accent: #7c5cff;
+      --accent-2: #00e5ff;
+      --accent-3: #ff4fd8;
+      --line: rgba(255, 255, 255, 0.16);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      --radius: 26px;
+    }
 
-/* ── RESET ──────────────────────────────── */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:400;overflow-x:hidden;cursor:none}
-a{color:inherit;text-decoration:none}
-img{display:block;width:100%;height:100%;object-fit:cover}
-button{cursor:none;font-family:inherit;border:none;background:none}
-input,textarea{font-family:inherit}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* ── SCANLINES ──────────────────────────── */
-body::before{
-  content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.07) 3px,rgba(0,0,0,.07) 4px);
-  pointer-events:none;z-index:9001;
-}
-body::after{
-  content:'';position:fixed;inset:0;
-  opacity:.02;pointer-events:none;z-index:9000;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* ── CURSOR ─────────────────────────────── */
-#cur{position:fixed;width:6px;height:6px;background:var(--cyan);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 8px var(--cyan),0 0 18px var(--gC)}
-#cur-ring{position:fixed;width:28px;height:28px;border:1px solid var(--cyan);pointer-events:none;z-index:9998;transform:translate(-50%,-50%) rotate(45deg);opacity:.4;transition:width .3s,height .3s,border-color .3s,opacity .3s}
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, rgba(124, 92, 255, 0.26), transparent 30%),
+                  radial-gradient(circle at 80% 20%, rgba(0, 229, 255, 0.18), transparent 26%),
+                  radial-gradient(circle at 50% 90%, rgba(255, 79, 216, 0.12), transparent 28%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-/* ── NAV ────────────────────────────────── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:2rem 5rem;transition:padding .4s,background .4s,backdrop-filter .4s}
-nav.scrolled{padding:1.1rem 5rem;background:rgba(3,5,8,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--lc)}
-.nav-logo{font-family:'Orbitron',monospace;font-size:.72rem;font-weight:900;letter-spacing:.25em;color:var(--cyan);text-shadow:0 0 12px var(--gC)}
-.nav-logo span{color:var(--text);opacity:.4}
-.nav-status{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--purple);opacity:.7}
-.nav-links{display:flex;gap:2.5rem;list-style:none}
-.nav-links a{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .3s}
-.nav-links a::before{content:'// ';color:var(--cyan);opacity:.5}
-.nav-links a:hover{color:var(--cyan)}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+      z-index: -2;
+    }
 
-/* ── HERO ───────────────────────────────── */
-#hero{height:100svh;min-height:600px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:0 5rem 6rem;overflow:hidden}
-#heroCanvas{position:absolute;inset:0;width:100%;height:100%}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--lc) 1px,transparent 1px),linear-gradient(90deg,var(--lc) 1px,transparent 1px);background-size:60px 60px}
-.hero-fade{position:absolute;inset:0;background:radial-gradient(ellipse 80% 85% at 50% 50%,transparent 25%,var(--bg) 100%)}
+    canvas#stars {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -3;
+    }
 
-/* hero photo frame */
-.hero-frame{position:absolute;right:5%;top:7%;width:32%;height:82%}
-.hf-inner{position:absolute;inset:0;background:rgba(7,9,15,.85);border:1px solid var(--lc);overflow:hidden;display:flex;align-items:center;justify-content:center}
-.hf-inner img{display:none}
-.frame-ph{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(0,217,255,.22);text-align:center;line-height:2}
-/* 4 bracket corners using positioned divs */
-.br{position:absolute;width:22px;height:22px;border-color:var(--cyan);border-style:solid;z-index:2;box-shadow:0 0 10px var(--gC)}
-.br-tl{top:-1px;left:-1px;border-width:2px 0 0 2px}
-.br-tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
-.br-bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
-.br-br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
-/* scan line animation */
-.scan{position:absolute;width:100%;height:1.5px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.35;top:0;animation:scanMove 3.5s linear infinite}
-@keyframes scanMove{0%{top:0}100%{top:100%}}
+    a, button, .work-card, .filter-pill {
+      cursor: none;
+    }
 
-/* hero copy */
-.hero-copy{position:relative;z-index:2;max-width:55%}
-.hero-tag{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.22em;color:var(--cyan);margin-bottom:1.4rem;opacity:0;animation:fadeUp .8s .3s both}
-.hero-tag::before{content:'> '}
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      mix-blend-mode: screen;
+    }
 
-/* glitch name */
-.hero-name{font-family:'Orbitron',monospace;font-size:clamp(3rem,7.5vw,8.8rem);font-weight:900;line-height:.9;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:2rem;opacity:0;animation:fadeUp 1s .5s both}
-.glyph{position:relative;display:inline-block}
-.glyph::before,.glyph::after{content:attr(data-t);position:absolute;top:0;left:0;width:100%;height:100%}
-.glyph::before{color:var(--cyan);animation:gA 5s infinite 2s;clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%);opacity:0}
-.glyph::after{color:var(--purple);animation:gB 5s infinite 2.1s;clip-path:polygon(0 62%,100% 62%,100% 80%,0 80%);opacity:0}
-@keyframes gA{0%,90%,100%{transform:none;opacity:0}91%{transform:translate(-3px);opacity:.8}93%{transform:translate(3px);opacity:.8}95%{transform:none;opacity:0}}
-@keyframes gB{0%,90%,100%{transform:none;opacity:0}91.5%{transform:translate(3px);opacity:.8}93.5%{transform:translate(-2px);opacity:.8}95%{transform:none;opacity:0}}
-.hero-name em{font-style:normal;color:var(--cyan);text-shadow:0 0 30px var(--gC),0 0 60px rgba(0,217,255,.12)}
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-2);
+      box-shadow: 0 0 22px var(--accent-2);
+    }
 
-.hero-sub{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.2em;color:var(--muted);opacity:0;animation:fadeUp .8s .85s both}
-.blink{color:var(--cyan);animation:blink 1.2s step-end infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    .cursor-ring {
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,0.52);
+      transition: width 180ms ease, height 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
 
-.hero-scroll{position:absolute;bottom:4.5rem;right:5rem;display:flex;flex-direction:column;align-items:center;gap:.8rem;opacity:0;animation:fadeIn .8s 1.6s both}
-.sc-lbl{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.25em;color:var(--muted);writing-mode:vertical-rl}
-.sc-bar{width:1px;height:50px;background:linear-gradient(to bottom,var(--cyan),transparent);animation:sPulse 2s infinite}
-@keyframes sPulse{0%,100%{transform:scaleY(1);transform-origin:top;opacity:1}50%{transform:scaleY(.4);transform-origin:top;opacity:.3}}
+    .cursor-ring.active {
+      width: 64px;
+      height: 64px;
+      border-color: rgba(0,229,255,0.85);
+      background: rgba(0,229,255,0.08);
+    }
 
-/* ── SHARED LABEL / TITLE ───────────────── */
-.sec-lbl{font-family:'Share Tech Mono',monospace;font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.6rem;display:flex;align-items:center;gap:.8rem}
-.sec-lbl::before{content:'';width:1.8rem;height:1px;background:var(--cyan)}
-.sec-lbl::after{content:'';flex:1;max-width:50px;height:1px;background:var(--lc)}
-.sec-title{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,3.5vw,3.4rem);font-weight:700;line-height:1.15;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2rem}
-.sec-title em{font-style:normal;color:var(--cyan);text-shadow:0 0 20px var(--gC)}
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      z-index: 9998;
+    }
 
-/* ── ABOUT ──────────────────────────────── */
-#about{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;padding:10rem 5rem;position:relative}
-#about::after{content:'';position:absolute;left:50%;top:10%;bottom:10%;width:1px;background:linear-gradient(to bottom,transparent,var(--lc),var(--lc),transparent);pointer-events:none}
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
 
-.img-wrap{position:relative}
-.img-frame{position:relative;width:100%;aspect-ratio:3/4}
-.img-frame .hf-inner{border-radius:0}
-.img-frame img{display:none}
-.img-deco{position:absolute;bottom:-1.8rem;left:-1.8rem;width:56%;height:56%;border:1px solid rgba(157,92,255,.18);z-index:-1;pointer-events:none}
+    header {
+      position: sticky;
+      top: 16px;
+      z-index: 50;
+      padding: 14px 0;
+    }
 
-.about-body{font-size:.9rem;line-height:2.05;color:var(--muted);margin-bottom:3rem;font-weight:400}
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: rgba(6, 8, 22, 0.68);
+      backdrop-filter: blur(18px);
+      border-radius: 999px;
+      box-shadow: 0 14px 60px rgba(0,0,0,0.28);
+    }
 
-/* HUD stats */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;border-top:1px solid var(--lc);padding-top:2rem}
-.stat{padding:.9rem 1rem;border:1px solid var(--lc);background:rgba(0,217,255,.018);position:relative}
-.stat::before{content:'';position:absolute;top:0;left:0;width:8px;height:8px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan)}
-.stat-key{font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);opacity:.7;margin-bottom:.35rem}
-.stat-val{font-family:'Orbitron',monospace;font-size:1.75rem;font-weight:700;color:#fff;text-shadow:0 0 14px var(--gC)}
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      text-decoration: none;
+      padding-left: 10px;
+    }
 
-/* ── WORK ───────────────────────────────── */
-#work{padding:8rem 0}
-.work-head{padding:0 5rem;margin-bottom:4rem;display:flex;justify-content:space-between;align-items:flex-end}
-.entries{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.14em;color:var(--muted)}
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 30px rgba(124, 92, 255, 0.45);
+    }
 
-.grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:260px;gap:1rem;padding:0 5rem}
-.gi:nth-child(1){grid-column:1/6;grid-row:1}
-.gi:nth-child(2){grid-column:6/9;grid-row:1}
-.gi:nth-child(3){grid-column:9/13;grid-row:1/3}
-.gi:nth-child(4){grid-column:1/4;grid-row:2}
-.gi:nth-child(5){grid-column:4/9;grid-row:2}
-.gi:nth-child(6){grid-column:1/7;grid-row:3}
-.gi:nth-child(7){grid-column:7/13;grid-row:3}
+    .logo-mark span {
+      color: white;
+      font-size: 14px;
+      font-weight: 900;
+    }
 
-.gi{position:relative;overflow:hidden;cursor:none}
-.gi-img{width:100%;height:100%;background:var(--surf);border:1px solid var(--lc);transition:transform .9s var(--ease),border-color .35s;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.gi-img img{display:none}
-.gi-ph{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.16em;color:rgba(0,217,255,.18);text-transform:uppercase}
-.gi .scan{opacity:0;transition:opacity .3s}
-.gi:hover .scan{opacity:.28}
-.gi:hover .gi-img{transform:scale(1.05);border-color:rgba(0,217,255,.35)}
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 6px;
+      align-items: center;
+    }
 
-/* bracket corners on hover */
-.gi::before,.gi::after{content:'';position:absolute;width:14px;height:14px;border-color:var(--cyan);border-style:solid;z-index:4;opacity:0;transition:opacity .3s;pointer-events:none}
-.gi::before{top:6px;left:6px;border-width:2px 0 0 2px;box-shadow:-3px -3px 8px var(--gC)}
-.gi::after{bottom:6px;right:6px;border-width:0 2px 2px 0;box-shadow:3px 3px 8px var(--gC)}
-.gi:hover::before,.gi:hover::after{opacity:1}
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 13px;
+      border-radius: 999px;
+      transition: color 180ms ease, background 180ms ease;
+    }
 
-.gi-over{position:absolute;inset:0;background:linear-gradient(to top,rgba(3,5,8,.92) 0%,rgba(3,5,8,.45) 50%,transparent 100%);opacity:0;transition:opacity .35s;display:flex;align-items:flex-end;padding:1.2rem;z-index:3}
-.gi:hover .gi-over{opacity:1}
-.gi-idx{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.18em;color:var(--cyan);opacity:.7;margin-bottom:.25rem}
-.gi-title{font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem;color:#fff}
-.gi-cat{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+    nav a:hover,
+    nav a.active {
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+    }
 
-/* ── CONTACT ────────────────────────────── */
-#contact{display:grid;grid-template-columns:1fr 1fr;gap:7rem;padding:10rem 5rem;border-top:1px solid var(--lc);position:relative}
-#contact::before{content:'OPEN_CHANNEL.init()';font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.14em;color:var(--purple);opacity:.28;position:absolute;top:2.8rem;left:50%;transform:translateX(-50%);white-space:nowrap}
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
 
-.contact-note{font-size:.88rem;line-height:2.05;color:var(--muted);max-width:380px;margin-bottom:3.5rem}
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      padding: 11px 15px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      user-select: none;
+    }
 
-/* social blocks */
-.socials{display:flex;flex-direction:column}
-.slink{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 0;border-bottom:1px solid var(--lc);transition:border-color .3s}
-.slink:hover{border-bottom-color:var(--cyan)}
-.sl-left{display:flex;align-items:center;gap:1.2rem}
-.sl-icon{width:38px;height:38px;border:1px solid var(--lc);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s,background .3s}
-.slink:hover .sl-icon{border-color:var(--cyan);background:rgba(0,217,255,.06)}
-.sl-icon svg{width:17px;height:17px;fill:var(--cyan)}
-.sl-plat{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.28rem;transition:color .3s}
-.slink:hover .sl-plat{color:var(--cyan)}
-.sl-handle{font-family:'Orbitron',monospace;font-size:.88rem;font-weight:500;letter-spacing:.06em;transition:color .3s,text-shadow .3s}
-.slink:hover .sl-handle{color:var(--cyan);text-shadow:0 0 14px var(--gC)}
-.sl-arr{color:var(--cyan);opacity:.55;font-size:.95rem;transition:transform .3s,opacity .3s}
-.slink:hover .sl-arr{transform:translate(3px,-3px);opacity:1}
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0,229,255,0.55);
+      background: rgba(0,229,255,0.12);
+    }
 
-/* form */
-.cform{display:flex;flex-direction:column;gap:2rem}
-.fg{display:flex;flex-direction:column;gap:.5rem}
-.fl{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);opacity:.8}
-.fi,.ft{background:rgba(0,217,255,.02);border:none;border-bottom:1px solid var(--lc);padding:.85rem .5rem;color:var(--text);font-size:.85rem;outline:none;transition:border-color .3s,background .3s;resize:none;letter-spacing:.04em}
-.fi::placeholder,.ft::placeholder{color:var(--muted);opacity:.6}
-.fi:focus,.ft:focus{border-bottom-color:var(--cyan);background:rgba(0,217,255,.04)}
-.ft{min-height:85px}
-.fsend{align-self:flex-start;padding:.85rem 2.2rem;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;position:relative;overflow:hidden;transition:color .3s}
-.fsend::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateX(-102%);transition:transform .35s var(--ease)}
-.fsend span{position:relative;z-index:1}
-.fsend:hover::before{transform:translateX(0)}
-.fsend:hover{color:var(--bg)}
+    .btn.primary {
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 16px 45px rgba(0, 229, 255, 0.16), 0 16px 45px rgba(124, 92, 255, 0.2);
+    }
 
-/* ── FOOTER ─────────────────────────────── */
-footer{display:flex;justify-content:space-between;align-items:center;padding:2.5rem 5rem;border-top:1px solid var(--lc)}
-.ft-name{font-family:'Orbitron',monospace;font-size:.68rem;font-weight:900;letter-spacing:.2em;color:var(--cyan);text-shadow:0 0 10px var(--gC)}
-.ft-sys{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.12em;color:var(--muted)}
+    .menu-button {
+      display: none;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 800;
+    }
 
-/* ── ANIMATIONS ─────────────────────────── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
-.reveal.vis{opacity:1;transform:none}
-.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+    .hero {
+      min-height: calc(100vh - 92px);
+      display: grid;
+      align-items: center;
+      padding: 58px 0 86px;
+      position: relative;
+    }
 
-/* ── RESPONSIVE ─────────────────────────── */
-@media(max-width:900px){
-  nav{padding:1.4rem 2rem}
-  nav.scrolled{padding:1rem 2rem}
-  .nav-links,.nav-status{display:none}
-  #hero{padding:0 2rem 4rem}
-  .hero-copy{max-width:100%}
-  .hero-frame{display:none}
-  .hero-scroll{right:2rem}
-  #about{grid-template-columns:1fr;padding:6rem 2rem;gap:4rem}
-  #about::after{display:none}
-  .work-head{padding:0 2rem}
-  .grid{padding:0 2rem;grid-template-columns:1fr 1fr;grid-auto-rows:200px}
-  .gi:nth-child(n){grid-column:auto;grid-row:auto}
-  #contact{grid-template-columns:1fr;padding:6rem 2rem;gap:4rem}
-  footer{padding:2rem;flex-direction:column;gap:1rem;text-align:center}
-}
-</style>
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--accent-2);
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.22);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 0 rgba(0,229,255,0.75);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      70% { box-shadow: 0 0 0 12px rgba(0,229,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,229,255,0); }
+    }
+
+    h1 {
+      font-size: clamp(48px, 8vw, 104px);
+      line-height: 0.92;
+      letter-spacing: -0.075em;
+      max-width: 880px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #ffffff, #a9f7ff, #d8c8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.75;
+      max-width: 650px;
+    }
+
+    .hero-actions {
+      margin-top: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+      max-width: 680px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.055);
+      border-radius: 22px;
+      padding: 18px;
+      backdrop-filter: blur(12px);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 26px;
+      letter-spacing: -0.04em;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero-card {
+      position: relative;
+      min-height: 560px;
+      border-radius: 38px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035));
+      box-shadow: var(--shadow);
+      transform-style: preserve-3d;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(1px);
+      opacity: 0.88;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .orb.one {
+      width: 210px;
+      height: 210px;
+      background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent), transparent 70%);
+      top: 64px;
+      left: 58px;
+    }
+
+    .orb.two {
+      width: 170px;
+      height: 170px;
+      background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-2), transparent 70%);
+      right: 56px;
+      bottom: 92px;
+      animation-delay: -2.4s;
+    }
+
+    .orb.three {
+      width: 92px;
+      height: 92px;
+      background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-3), transparent 70%);
+      right: 80px;
+      top: 96px;
+      animation-delay: -4.2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 40px) rotate(0deg); }
+      50% { transform: translate3d(10px, -24px, 80px) rotate(14deg); }
+    }
+
+    .glass-panel {
+      position: absolute;
+      inset: auto 34px 34px 34px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(5,7,19,0.64);
+      backdrop-filter: blur(18px);
+      border-radius: 26px;
+      transform: translateZ(70px);
+    }
+
+    .glass-panel h2 {
+      letter-spacing: -0.04em;
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .glass-panel p {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .mini-grid {
+      position: absolute;
+      top: 42px;
+      right: 34px;
+      display: grid;
+      grid-template-columns: repeat(2, 86px);
+      gap: 12px;
+      transform: translateZ(52px);
+    }
+
+    .mini-tile {
+      height: 86px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.08);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: rgba(255,255,255,0.86);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+    }
+
+    section {
+      padding: 96px 0;
+      position: relative;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .section-kicker {
+      color: var(--accent-2);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 4.5vw, 58px);
+      letter-spacing: -0.06em;
+      line-height: 1;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      max-width: 470px;
+      line-height: 1.7;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 14px 0 28px;
+    }
+
+    .filter-pill {
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255,255,255,0.055);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 850;
+      transition: transform 180ms ease, color 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active {
+      transform: translateY(-2px);
+      color: var(--text);
+      border-color: rgba(0,229,255,0.5);
+      background: rgba(0,229,255,0.12);
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .work-card {
+      position: relative;
+      min-height: 330px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.22);
+      transform-style: preserve-3d;
+      transition: transform 220ms ease, border-color 220ms ease, opacity 220ms ease;
+      isolation: isolate;
+    }
+
+    .work-card.hide {
+      display: none;
+    }
+
+    .work-card:hover {
+      border-color: rgba(0,229,255,0.55);
+    }
+
+    .work-media {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.28), transparent 18%),
+        linear-gradient(135deg, rgba(124,92,255,0.76), rgba(0,229,255,0.42));
+      transform: scale(1.02);
+      transition: transform 400ms ease;
+    }
+
+    .work-card:hover .work-media {
+      transform: scale(1.08);
+    }
+
+
+    .work-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      transform: scale(1.01);
+      transition: transform 420ms ease, filter 220ms ease;
+      filter: saturate(1.04) contrast(1.04);
+    }
+
+    .work-card:hover .work-image {
+      transform: scale(1.08);
+    }
+
+    .work-media {
+      z-index: 0;
+    }
+
+    .work-card.image-loaded .placeholder-icon {
+      opacity: 0;
+    }
+
+    .work-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(135deg, rgba(255,255,255,0.24) 0 1px, transparent 1px),
+                        linear-gradient(45deg, rgba(0,0,0,0.22), transparent 45%, rgba(255,255,255,0.12));
+      background-size: 26px 26px, 100% 100%;
+      opacity: 0.42;
+    }
+
+    .work-media.model { background: radial-gradient(circle at 30% 24%, rgba(255,255,255,0.5), transparent 16%), linear-gradient(135deg, #7c5cff, #00e5ff); }
+    .work-media.ui { background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.5), transparent 17%), linear-gradient(135deg, #10172f, #7c5cff 48%, #ff4fd8); }
+    .work-media.gfx { background: radial-gradient(circle at 42% 28%, rgba(255,255,255,0.55), transparent 18%), linear-gradient(135deg, #ff4fd8, #7c5cff 42%, #00e5ff); }
+
+    .placeholder-icon {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 72px;
+      font-weight: 1000;
+      letter-spacing: -0.08em;
+      color: rgba(255,255,255,0.28);
+      z-index: 2;
+      transform: translateZ(45px);
+      user-select: none;
+      transition: opacity 220ms ease;
+    }
+
+    .work-content {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(5,7,19,0.66);
+      backdrop-filter: blur(16px);
+      z-index: 3;
+      transform: translateZ(55px);
+    }
+
+    .work-tag {
+      color: var(--accent-2);
+      font-size: 12px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      margin-bottom: 8px;
+    }
+
+    .work-content h3 {
+      font-size: 22px;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+
+    .work-content p {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .showcase-section {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.065), rgba(255,255,255,0.025));
+      border-radius: 36px;
+      padding: 34px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .showcase-section::before {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      right: -80px;
+      top: -80px;
+      background: radial-gradient(circle, rgba(0,229,255,0.16), transparent 68%);
+      pointer-events: none;
+    }
+
+    .horizontal-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .wide-card {
+      min-height: 240px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .about-card {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      border-radius: 30px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+    }
+
+    .about-card h3 {
+      font-size: 26px;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
+    }
+
+    .about-card p,
+    .about-card li {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .skill-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .skill-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      padding-bottom: 10px;
+    }
+
+    .skill-list strong {
+      color: var(--text);
+    }
+
+    .contact-box {
+      text-align: center;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(124,92,255,0.17), rgba(0,229,255,0.08));
+      border-radius: 40px;
+      padding: clamp(34px, 7vw, 70px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-box::before,
+    .contact-box::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 68%);
+      pointer-events: none;
+    }
+
+    .contact-box::before { left: -100px; top: -120px; }
+    .contact-box::after { right: -100px; bottom: -120px; }
+
+    .contact-box h2 {
+      font-size: clamp(34px, 5vw, 66px);
+      letter-spacing: -0.07em;
+      line-height: 1;
+      position: relative;
+    }
+
+    .contact-box p {
+      margin: 18px auto 0;
+      color: var(--muted);
+      max-width: 630px;
+      line-height: 1.75;
+      position: relative;
+    }
+
+    .contact-actions {
+      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: relative;
+    }
+
+    footer {
+      padding: 34px 0 46px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(12px);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(900px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: #080b1b;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-preview {
+      min-height: 420px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      position: relative;
+    }
+
+    .modal-preview::after {
+      content: "PREVIEW";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: clamp(54px, 10vw, 118px);
+      font-weight: 1000;
+      letter-spacing: -0.08em;
+      color: rgba(255,255,255,0.23);
+    }
+
+
+    .modal-preview.has-image::after {
+      content: "";
+      background: radial-gradient(circle at 50% 20%, rgba(255,255,255,0.16), transparent 34%),
+                  linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.38));
+    }
+
+    .modal-info {
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .modal-info h3 {
+      font-size: 28px;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .modal-info p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .close-modal {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 900;
+    }
+
+    .mobile-panel {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      body { cursor: auto; }
+      a, button, .work-card, .filter-pill { cursor: pointer; }
+      .cursor-dot, .cursor-ring { display: none; }
+      .hero-grid,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-card {
+        min-height: 460px;
+      }
+      .work-grid,
+      .horizontal-gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      nav ul,
+      .nav-actions {
+        display: none;
+      }
+      .menu-button {
+        display: inline-flex;
+      }
+      .mobile-panel.open {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        background: rgba(6, 8, 22, 0.88);
+        backdrop-filter: blur(18px);
+      }
+      .mobile-panel a {
+        color: var(--text);
+        text-decoration: none;
+        padding: 12px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.06);
+        font-weight: 800;
+      }
+    }
+
+    @media (max-width: 660px) {
+      .shell {
+        width: min(100% - 26px, 1180px);
+      }
+      header {
+        top: 8px;
+      }
+      .hero {
+        padding-top: 30px;
+      }
+      .stats,
+      .work-grid,
+      .horizontal-gallery {
+        grid-template-columns: 1fr;
+      }
+      .section-head {
+        display: block;
+      }
+      .section-copy {
+        margin-top: 14px;
+      }
+      .showcase-section {
+        padding: 20px;
+        border-radius: 28px;
+      }
+      .hero-card {
+        min-height: 390px;
+        border-radius: 28px;
+      }
+      .mini-grid {
+        grid-template-columns: repeat(2, 72px);
+      }
+      .mini-tile {
+        height: 72px;
+      }
+      .orb.one { width: 155px; height: 155px; }
+      .orb.two { width: 128px; height: 128px; }
+      .modal-preview { min-height: 300px; }
+      .modal-info { display: block; }
+      .close-modal { margin-top: 16px; width: 100%; }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-<div id="cur"></div>
-<div id="cur-ring"></div>
-
-<!-- NAV -->
-<nav id="nav">
-  <!-- ★ REPLACE: YOUR_NAME -->
-  <a href="#hero" class="nav-logo">YOUR_<span>NAME</span>.exe</a>
-  <span class="nav-status">SYS_STATUS: <span style="color:var(--cyan)">ONLINE</span></span>
-  <ul class="nav-links">
-    <li><a href="#about">profile</a></li>
-    <li><a href="#work">builds</a></li>
-    <li><a href="#contact">connect</a></li>
-  </ul>
-</nav>
-
-<!-- ─── HERO ─────────────────────────────────── -->
-<section id="hero">
-  <canvas id="heroCanvas"></canvas>
-  <div class="hero-grid"></div>
-  <div class="hero-fade"></div>
-
-  <!-- ★ REPLACE src="hero.jpg" with your photo filename -->
-  <div class="hero-frame">
-    <div class="br br-tl"></div>
-    <div class="br br-tr"></div>
-    <div class="br br-bl"></div>
-    <div class="br br-br"></div>
-    <div class="hf-inner">
-      <img src="hero.jpg" alt="Your Name"/>
-      <div class="frame-ph">Your photo here<br/><span style="font-size:.42rem;opacity:.4">(replace src="hero.jpg")</span></div>
-      <div class="scan"></div>
-    </div>
-  </div>
-
-  <div class="hero-copy">
-    <!-- ★ REPLACE: your role / specialties -->
-    <p class="hero-tag">ROBLOX_MODEL &nbsp;|&nbsp; HIDDEN_DEVS</p>
-
-    <!-- ★ REPLACE both data-t="..." AND the text inside each span -->
-    <h1 class="hero-name">
-      <span class="glyph" data-t="YOUR">YOUR</span><br>
-      <em class="glyph" data-t="NAME">NAME</em>
-    </h1>
-
-    <!-- ★ REPLACE: your specialties & city -->
-    <p class="hero-sub">GFX &middot; AVATAR MODELING &middot; YOUR CITY &nbsp;<span class="blink">█</span></p>
-  </div>
-
-  <div class="hero-scroll">
-    <div class="sc-bar"></div>
-    <span class="sc-lbl">scroll</span>
-  </div>
-</section>
-
-<!-- ─── ABOUT ─────────────────────────────────── -->
-<section id="about">
-
-  <div class="img-wrap reveal">
-    <div class="img-frame">
-      <div class="br br-tl"></div>
-      <div class="br br-tr"></div>
-      <div class="br br-bl"></div>
-      <div class="br br-br"></div>
-      <div class="hf-inner">
-        <!-- ★ REPLACE src="about.jpg" -->
-        <img src="about.jpg" alt="Your Name"/>
-        <div class="frame-ph">Your portrait here</div>
-        <div class="scan"></div>
+  <header class="shell">
+    <div class="nav">
+      <a href="#top" class="logo" aria-label="Go to top">
+        <span class="logo-mark"><span>Z</span></span>
+        <span>Zeyd Portfolio</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#models">3D Models</a></li>
+          <li><a href="#ui">UI</a></li>
+          <li><a href="#gfx">GFX</a></li>
+          <li><a href="#contact">Links</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <!-- Replace these href values with your real links. -->
+        <a class="btn" href="https://discord.gg/YOUR-DISCORD-LINK" target="_blank" rel="noopener">Discord</a>
+        <a class="btn primary" href="https://www.roblox.com/users/2036991936/profile" target="_blank" rel="noopener">Roblox</a>
       </div>
+      <button class="menu-button" id="menuButton" type="button" aria-label="Open menu">Menu</button>
     </div>
-    <div class="img-deco"></div>
-  </div>
-
-  <div>
-    <p class="sec-lbl reveal">PLAYER.PROFILE</p>
-    <!-- ★ REPLACE: your headline -->
-    <h2 class="sec-title reveal d1">BEHIND<br>THE <em>AVATAR</em></h2>
-    <!-- ★ REPLACE: 2–3 sentence bio -->
-    <p class="about-body reveal d2">
-      Write a short bio about yourself right here. Tell people what you do — your Roblox modeling experience, the kind of projects you love, and what makes you stand out. Keep it direct and confident.
-    </p>
-
-    <!-- ★ REPLACE: your actual numbers -->
-    <div class="stats reveal d3">
-      <div class="stat">
-        <div class="stat-key">YEARS_EXP</div>
-        <div class="stat-val">3+</div>
-      </div>
-      <div class="stat">
-        <div class="stat-key">PROJECTS</div>
-        <div class="stat-val">50+</div>
-      </div>
-      <div class="stat">
-        <div class="stat-key">RATING</div>
-        <div class="stat-val">5★</div>
-      </div>
+    <div class="mobile-panel" id="mobilePanel">
+      <a href="#work">Work</a>
+      <a href="#models">3D Models</a>
+      <a href="#ui">UI Elements</a>
+      <a href="#gfx">GFX</a>
+      <a href="https://discord.gg/YOUR-DISCORD-LINK" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.roblox.com/users/YOUR_USER_ID/profile" target="_blank" rel="noopener">Roblox</a>
     </div>
-  </div>
+  </header>
 
-</section>
-
-<!-- ─── WORK ──────────────────────────────────── -->
-<section id="work">
-  <div class="work-head">
-    <div>
-      <p class="sec-lbl reveal">BUILD_LOG</p>
-      <h2 class="sec-title reveal d1">SELECTED<br><em>WORK</em></h2>
-    </div>
-    <span class="entries reveal">ENTRIES: 007</span>
-  </div>
-
-  <div class="grid">
-    <!-- ★ REPLACE each src with your actual photo. Update title & category too. -->
-    <div class="gi reveal">
-      <div class="gi-img"><img src="work1.jpg" alt=""/><span class="gi-ph">IMAGE_01</span><div class="scan"></div></div>
-      <div class="gi-over"><div><div class="gi-idx">BUILD_001</div><div class="gi-title">Project Name</div><div class="gi-cat">GFX / Editorial</div></div></div>
-    </div>
-
-    <div class="gi reveal d1">
-      <div class="gi-img"><img src="work2.jpg" alt=""/><span class="gi-ph">IMAGE_02</span><div class="scan"></div></div>
-      <div class="gi-over"><div><div class="gi-idx">BUILD_002</div><div class="gi-title">Project Name</div><div class="gi-cat">Avatar Design</div></div></div>
-    </div>
-
-    <div class="gi reveal d2">
-      <div class="gi-img"><img src="work3.jpg" alt=""/><span class="gi-ph">IMAGE_03</span><div class="scan"></div></div>
-      <div class="gi-over"><div><div class="gi-idx">BUILD_003</div><div class="gi-title">Project Name</div><div class="gi-cat">Character Model</div></div></div>
-    </div>
-
-    <div class="gi reveal d1">
-      <div class="gi-img"><img src="work4.jpg" alt=""/><span class="gi-ph">IMAGE_04</span><div class="scan"></div></div>
-      <div class="gi-over"><div><div class="gi-idx">BUILD_004</div><div class="gi-title">Project Name</div><div class="gi-cat">GFX Render</div></div></div>
-    </div>
-
-    <div class="gi reveal d2">
-      <div class="gi-img"><img src="work5.jpg" alt=""/><span class="gi-ph">IMAGE_05</span><div class="scan"></div></div>
-      <div class="gi-over"><div><div class="gi-idx">BUILD_005</div><div class="gi-title">Project Name</div><div class="gi-cat">Clothing Design</div></div></div>
-    </div>
-
-    <div class="gi reveal">
-      <div class="gi-img"><img src="work6.jpg" alt=""/><span class="gi-ph">IMAGE_06</span><div class="scan"></div></div>
-      <div class="gi-over"><div><div class="gi-idx">BUILD_006</div><div class="gi-title">Project Name</div><div class="gi-cat">Scene Build</div></div></div>
-    </div>
-
-    <div class="gi reveal d1">
-      <div class="gi-img"><img src="work7.jpg" alt=""/><span class="gi-ph">IMAGE_07</span><div class="scan"></div></div>
-      <div class="gi-over"><div><div class="gi-idx">BUILD_007</div><div class="gi-title">Project Name</div><div class="gi-cat">GFX / Promo</div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── CONTACT ───────────────────────────────── -->
-<section id="contact">
-
-  <div>
-    <p class="sec-lbl reveal">OPEN_CHANNEL</p>
-    <h2 class="sec-title reveal d1">LET'S<br><em>CONNECT</em></h2>
-    <!-- ★ REPLACE: your availability / note -->
-    <p class="contact-note reveal d2">
-      Available for GFX, avatar modeling, and Roblox game projects. Open to commissions and long-term collabs. Find me on Hidden Devs.
-    </p>
-
-    <div class="socials reveal d3">
-
-      <!-- ★ REPLACE: YOUR_ROBLOX_ID (number in your profile URL) & YourUsername -->
-      <a href="https://www.roblox.com/users/YOUR_ROBLOX_ID/profile" target="_blank" rel="noopener" class="slink">
-        <div class="sl-left">
-          <div class="sl-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5.076 0L0 18.924 18.924 24 24 5.076 5.076 0zm8.698 13.548l-3.625-.972.973-3.625 3.624.973-.972 3.624z"/>
-            </svg>
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-grid">
+        <div class="reveal">
+          <div class="eyebrow"><span class="pulse"></span> Roblox creator · 3D · UI · GFX</div>
+          <h1>Building clean, playful, <span class="gradient-text">game-ready visuals.</span></h1>
+          <p>
+            A portfolio for my 3D models, UI elements, and GFX work. The site is made to feel smooth, interactive, and polished: hover cards, animated sections, particles, filters, and a custom mouse effect.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#work">View my work</a>
+            <a class="btn" href="#contact">Contact links</a>
           </div>
-          <div>
-            <div class="sl-plat">Roblox</div>
-            <div class="sl-handle">YourUsername</div>
+          <div class="stats" aria-label="Portfolio stats">
+            <div class="stat">
+              <strong data-count="12">0</strong>
+              <span>Showcase slots</span>
+            </div>
+            <div class="stat">
+              <strong data-count="3">0</strong>
+              <span>Creative sections</span>
+            </div>
+            <div class="stat">
+              <strong data-count="100">0</strong>
+              <span>% custom feel</span>
+            </div>
           </div>
         </div>
-        <span class="sl-arr">↗</span>
-      </a>
 
-      <!-- ★ REPLACE: YOUR_DISCORD_ID & yourname / tag -->
-      <a href="https://discord.com/users/YOUR_DISCORD_ID" target="_blank" rel="noopener" class="slink">
-        <div class="sl-left">
-          <div class="sl-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.014.043.031.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-            </svg>
+        <div class="hero-card tilt reveal" aria-label="Interactive visual card">
+          <div class="orb one"></div>
+          <div class="orb two"></div>
+          <div class="orb three"></div>
+          <div class="mini-grid">
+            <div class="mini-tile">3D</div>
+            <div class="mini-tile">UI</div>
+            <div class="mini-tile">GFX</div>
+            <div class="mini-tile">FX</div>
           </div>
-          <div>
-            <div class="sl-plat">Discord</div>
-            <!-- ★ REPLACE: your Discord username -->
-            <div class="sl-handle">yourname</div>
+          <div class="glass-panel">
+            <h2>Interactive portfolio</h2>
+            <p>Move your mouse over cards to see depth, glow, and motion. Click project cards to open a preview modal.</p>
           </div>
         </div>
-        <span class="sl-arr">↗</span>
-      </a>
+      </div>
+    </section>
 
+    <section class="shell" id="work">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-kicker">Selected work</div>
+          <h2 class="section-title">Gallery overview</h2>
+        </div>
+        <p class="section-copy">Use the filters to quickly switch between 3D models, UI elements, and GFX. The cards are already wired to images/img1.png through images/img28.png, grouped by category.</p>
+      </div>
+
+      <div class="filter-row reveal" role="group" aria-label="Portfolio filters">
+        <button class="filter-pill active" type="button" data-filter="all">All</button>
+        <button class="filter-pill" type="button" data-filter="model">3D Models</button>
+        <button class="filter-pill" type="button" data-filter="ui">UI Elements</button>
+        <button class="filter-pill" type="button" data-filter="gfx">GFX</button>
+      </div>
+
+      <div class="work-grid">
+        <article class="work-card tilt reveal" data-category="model" data-title="3D Model 01" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img1.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img1.png" alt="3D model portfolio image 1" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 01</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+
+        <article class="work-card tilt reveal" data-category="model" data-title="3D Model 02" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img2.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img2.png" alt="3D model portfolio image 2" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 02</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+
+        <article class="work-card tilt reveal" data-category="ui" data-title="UI Element 01" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img13.png">
+          <div class="work-media ui"></div>
+          <img class="work-image" src="images/img13.png" alt="UI element portfolio image 13" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">UI</div>
+          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 01</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
+        </article>
+
+        <article class="work-card tilt reveal" data-category="ui" data-title="UI Element 02" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img14.png">
+          <div class="work-media ui"></div>
+          <img class="work-image" src="images/img14.png" alt="UI element portfolio image 14" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">UI</div>
+          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 02</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
+        </article>
+
+        <article class="work-card tilt reveal" data-category="gfx" data-title="GFX Piece 01" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img19.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img19.png" alt="GFX portfolio image 19" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 01</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+
+        <article class="work-card tilt reveal" data-category="gfx" data-title="GFX Piece 02" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img20.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img20.png" alt="GFX portfolio image 20" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 02</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell" id="models">
+      <div class="showcase-section reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Section 01</div>
+            <h2 class="section-title">3D Models</h2>
+          </div>
+          <p class="section-copy">3D model screenshots are wired to images/img1.png through images/img12.png.</p>
+        </div>
+        <div class="horizontal-gallery">
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 01" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img1.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img1.png" alt="3D model portfolio image 1" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 01</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 02" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img2.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img2.png" alt="3D model portfolio image 2" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 02</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 03" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img3.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img3.png" alt="3D model portfolio image 3" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 03</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 04" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img4.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img4.png" alt="3D model portfolio image 4" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 04</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 05" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img5.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img5.png" alt="3D model portfolio image 5" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 05</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 06" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img6.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img6.png" alt="3D model portfolio image 6" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 06</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 07" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img7.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img7.png" alt="3D model portfolio image 7" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 07</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 08" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img8.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img8.png" alt="3D model portfolio image 8" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 08</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 09" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img9.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img9.png" alt="3D model portfolio image 9" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 09</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 10" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img10.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img10.png" alt="3D model portfolio image 10" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 10</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 11" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img11.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img11.png" alt="3D model portfolio image 11" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 11</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 12" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img12.png">
+          <div class="work-media model"></div>
+          <img class="work-image" src="images/img12.png" alt="3D model portfolio image 12" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">3D</div>
+          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 12</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell" id="ui">
+      <div class="showcase-section reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Section 02</div>
+            <h2 class="section-title">UI Elements</h2>
+          </div>
+          <p class="section-copy">UI screenshots are wired to images/img13.png through images/img18.png.</p>
+        </div>
+        <div class="horizontal-gallery">
+        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 01" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img13.png">
+          <div class="work-media ui"></div>
+          <img class="work-image" src="images/img13.png" alt="UI element portfolio image 13" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">UI</div>
+          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 01</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 02" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img14.png">
+          <div class="work-media ui"></div>
+          <img class="work-image" src="images/img14.png" alt="UI element portfolio image 14" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">UI</div>
+          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 02</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 03" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img15.png">
+          <div class="work-media ui"></div>
+          <img class="work-image" src="images/img15.png" alt="UI element portfolio image 15" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">UI</div>
+          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 03</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 04" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img16.png">
+          <div class="work-media ui"></div>
+          <img class="work-image" src="images/img16.png" alt="UI element portfolio image 16" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">UI</div>
+          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 04</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 05" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img17.png">
+          <div class="work-media ui"></div>
+          <img class="work-image" src="images/img17.png" alt="UI element portfolio image 17" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">UI</div>
+          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 05</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 06" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img18.png">
+          <div class="work-media ui"></div>
+          <img class="work-image" src="images/img18.png" alt="UI element portfolio image 18" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">UI</div>
+          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 06</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell" id="gfx">
+      <div class="showcase-section reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Section 03</div>
+            <h2 class="section-title">GFX</h2>
+          </div>
+          <p class="section-copy">GFX images are wired to images/img19.png through images/img28.png.</p>
+        </div>
+        <div class="horizontal-gallery">
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 01" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img19.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img19.png" alt="GFX portfolio image 19" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 01</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 02" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img20.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img20.png" alt="GFX portfolio image 20" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 02</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 03" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img21.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img21.png" alt="GFX portfolio image 21" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 03</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 04" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img22.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img22.png" alt="GFX portfolio image 22" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 04</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 05" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img23.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img23.png" alt="GFX portfolio image 23" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 05</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 06" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img24.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img24.png" alt="GFX portfolio image 24" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 06</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 07" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img25.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img25.png" alt="GFX portfolio image 25" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 07</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 08" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img26.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img26.png" alt="GFX portfolio image 26" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 08</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 09" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img27.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img27.png" alt="GFX portfolio image 27" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 09</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 10" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img28.png">
+          <div class="work-media gfx"></div>
+          <img class="work-image" src="images/img28.png" alt="GFX portfolio image 28" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
+          <div class="placeholder-icon">GFX</div>
+          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 10</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell" id="about">
+      <div class="about-grid">
+        <div class="about-card reveal">
+          <div class="section-kicker">About</div>
+          <h3>Focused on Roblox-ready visuals.</h3>
+          <p>I design assets that are readable, stylized, and practical for games. The goal is simple: make visuals that look good and still feel usable inside an actual player experience.</p>
+        </div>
+        <div class="about-card reveal">
+          <h3>Creative strengths</h3>
+          <ul class="skill-list">
+            <li><strong>3D Modeling</strong><span>low-poly props, stylized scenes</span></li>
+            <li><strong>UI Design</strong><span>buttons, HUDs, shop layouts</span></li>
+            <li><strong>GFX</strong><span>thumbnails, banners, promo art</span></li>
+            <li><strong>Game Feel</strong><span>motion, hover states, clean feedback</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell" id="contact">
+      <div class="contact-box reveal">
+        <h2>Want to see more?</h2>
+        <p>Use the links below to reach me or view my Roblox profile. Replace the placeholder links inside the HTML with your real Discord and Roblox URLs.</p>
+        <div class="contact-actions">
+          <a class="btn primary" href="https://discord.gg/YOUR-DISCORD-LINK" target="_blank" rel="noopener">Join my Discord</a>
+          <a class="btn" href="https://www.roblox.com/users/YOUR_USER_ID/profile" target="_blank" rel="noopener">View Roblox Profile</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <p>© <span id="year"></span> Zeyd. Built as a clean portfolio website for 3D models, UI, and GFX.</p>
+  </footer>
+
+  <div class="modal" id="projectModal" aria-hidden="true" role="dialog" aria-label="Project preview">
+    <div class="modal-card">
+      <div class="modal-preview" id="modalPreview"></div>
+      <div class="modal-info">
+        <div>
+          <h3 id="modalTitle">Project title</h3>
+          <p id="modalDesc">Project description</p>
+        </div>
+        <button class="close-modal" type="button" id="closeModal">Close</button>
+      </div>
     </div>
   </div>
 
-  <div class="reveal d2">
-    <form class="cform" id="contactForm">
-      <div class="fg">
-        <label class="fl">// Sender Name</label>
-        <input type="text" class="fi" placeholder="Your Roblox username" required/>
-      </div>
-      <div class="fg">
-        <label class="fl">// Discord Tag</label>
-        <input type="text" class="fi" placeholder="yourname" required/>
-      </div>
-      <div class="fg">
-        <label class="fl">// Project Type</label>
-        <input type="text" class="fi" placeholder="GFX, avatar model, scene build..."/>
-      </div>
-      <div class="fg">
-        <label class="fl">// Message</label>
-        <textarea class="ft" placeholder="Describe your project..." required></textarea>
-      </div>
-      <button type="submit" class="fsend" id="sendBtn"><span>SEND_MESSAGE.exe</span></button>
-    </form>
-  </div>
+  <script>
+    // === Easy edit area ===
+    // 1) Replace Discord links: search for YOUR-DISCORD-LINK.
+    // 2) Replace Roblox links: search for YOUR_USER_ID.
+    // 3) Put your images into the /images folder using these exact names:
+    //    3D Models: img1.png through img12.png
+    //    UI: img13.png through img18.png
+    //    GFX: img19.png through img28.png
+    // 4) To change text under a photo, edit the card's <h3> title and <p> description.
 
-</section>
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
 
-<!-- ─── FOOTER ─────────────────────────────────── -->
-<footer>
-  <!-- ★ REPLACE -->
-  <span class="ft-name">YOUR_NAME.exe</span>
-  <span class="ft-sys">© 2025 &nbsp;·&nbsp; HIDDEN_DEVS &nbsp;·&nbsp; ALL_RIGHTS_RESERVED</span>
-</footer>
+    window.addEventListener('mousemove', (event) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top = mouseY + 'px';
+    });
 
-<script>
-/* CURSOR */
-const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
-(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
-document.querySelectorAll('a,button,.gi').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ring.style.width='50px';ring.style.height='50px';ring.style.borderColor='var(--purple)';ring.style.opacity='.28'});
-  el.addEventListener('mouseleave',()=>{ring.style.width='28px';ring.style.height='28px';ring.style.borderColor='var(--cyan)';ring.style.opacity='.4'});
-});
-
-/* HERO PARTICLE NETWORK */
-const canvas=document.getElementById('heroCanvas'),ctx=canvas.getContext('2d');
-let W,H;
-const resize=()=>{W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight};
-resize();window.addEventListener('resize',resize,{passive:true});
-const N=55,D=130,pts=Array.from({length:N},()=>({x:Math.random()*1000,y:Math.random()*700,vx:(Math.random()-.5)*.32,vy:(Math.random()-.5)*.32,r:Math.random()*1.1+.4}));
-function drawNet(){
-  ctx.clearRect(0,0,W,H);
-  pts.forEach((p,i)=>{
-    p.x+=p.vx;p.y+=p.vy;
-    if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(0,217,255,.55)';ctx.fill();
-    for(let j=i+1;j<N;j++){
-      const q=pts[j],d=Math.hypot(p.x-q.x,p.y-q.y);
-      if(d<D){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=`rgba(0,217,255,${(1-d/D)*.16})`;ctx.lineWidth=.55;ctx.stroke()}
+    function animateCursor() {
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top = ringY + 'px';
+      requestAnimationFrame(animateCursor);
     }
-  });
-  requestAnimationFrame(drawNet);
-}
-drawNet();
+    animateCursor();
 
-/* NAV */
-const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>80),{passive:true});
+    document.querySelectorAll('a, button, .work-card').forEach((item) => {
+      item.addEventListener('mouseenter', () => cursorRing.classList.add('active'));
+      item.addEventListener('mouseleave', () => cursorRing.classList.remove('active'));
+    });
 
-/* SCROLL REVEAL */
-const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.1,rootMargin:'0px 0px -50px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    const progressBar = document.getElementById('progressBar');
+    function updateProgress() {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+      progressBar.style.width = progress + '%';
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
 
-/* FORM */
-document.getElementById('contactForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const btn=document.getElementById('sendBtn');
-  btn.querySelector('span').textContent='SENT ✓';btn.style.background='var(--cyan)';btn.style.color='var(--bg)';
-  setTimeout(()=>{btn.querySelector('span').textContent='SEND_MESSAGE.exe';btn.style.background='';btn.style.color='var(--cyan)';e.target.reset()},3000);
-});
-</script>
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.13 });
 
-<!--
-═══════════════════════════════════════════════════════════
-  HOW TO PERSONALISE
-═══════════════════════════════════════════════════════════
+    document.querySelectorAll('.reveal').forEach((el, index) => {
+      el.style.transitionDelay = Math.min(index * 40, 260) + 'ms';
+      revealObserver.observe(el);
+    });
 
-  1. NAME — search for "YOUR NAME" / "YOUR_NAME" and replace everywhere.
+    const counters = document.querySelectorAll('[data-count]');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = Number(el.dataset.count);
+        const duration = 900;
+        const start = performance.now();
 
-  2. PHOTOS — put your images in the SAME folder as this file:
-       hero.jpg    main full-body photo (right side of hero)
-       about.jpg   portrait for About section
-       work1.jpg … work7.jpg   your portfolio / GFX shots
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(target * eased);
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+      });
+    }, { threshold: 0.8 });
+    counters.forEach(counter => counterObserver.observe(counter));
 
-  3. STATS — update years, projects, rating in the About section.
+    document.querySelectorAll('.tilt').forEach((card) => {
+      card.addEventListener('mousemove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const rotateY = ((x / rect.width) - 0.5) * 12;
+        const rotateX = ((y / rect.height) - 0.5) * -12;
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        card.style.setProperty('--mx', (x / rect.width) * 100 + '%');
+        card.style.setProperty('--my', (y / rect.height) * 100 + '%');
+      });
 
-  4. ROBLOX LINK:
-       Find your numeric user ID in your Roblox profile URL
-       (e.g. roblox.com/users/123456789/profile)
-       Replace YOUR_ROBLOX_ID and YourUsername.
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+      });
+    });
 
-  5. DISCORD LINK:
-       Go to Discord → Settings → Advanced → Enable Developer Mode
-       Right-click your own username → Copy User ID
-       Replace YOUR_DISCORD_ID and yourname.
+    const filterButtons = document.querySelectorAll('.filter-pill');
+    const workCards = document.querySelectorAll('#work .work-card');
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const filter = button.dataset.filter;
+        workCards.forEach((card) => {
+          const shouldShow = filter === 'all' || card.dataset.category === filter;
+          card.classList.toggle('hide', !shouldShow);
+        });
+      });
+    });
 
-  6. DEPLOY FREE IN 60 SECONDS:
-       → https://app.netlify.com/drop
-       → Drag the ENTIRE FOLDER (this file + all photos)
-       → Instant live link like yourname.netlify.app
+    const modal = document.getElementById('projectModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalPreview = document.getElementById('modalPreview');
+    const closeModal = document.getElementById('closeModal');
 
-═══════════════════════════════════════════════════════════
--->
+    document.querySelectorAll('.work-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        modalTitle.textContent = card.dataset.title || 'Project preview';
+        modalDesc.textContent = card.dataset.desc || 'Replace this placeholder with your project description.';
+        const category = card.dataset.category || 'model';
+        const imagePath = card.dataset.image;
+        let baseGradient = 'linear-gradient(135deg, #7c5cff, #00e5ff)';
+        if (category === 'ui') baseGradient = 'linear-gradient(135deg, #10172f, #7c5cff 48%, #ff4fd8)';
+        else if (category === 'gfx') baseGradient = 'linear-gradient(135deg, #ff4fd8, #7c5cff 42%, #00e5ff)';
+
+        modalPreview.classList.toggle('has-image', Boolean(imagePath));
+        modalPreview.style.background = baseGradient;
+        if (imagePath) {
+          modalPreview.style.backgroundImage = `linear-gradient(180deg, rgba(5,7,19,0.02), rgba(5,7,19,0.42)), url("${imagePath}")`;
+          modalPreview.style.backgroundSize = 'cover';
+          modalPreview.style.backgroundPosition = 'center';
+        }
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    function closeProjectModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    closeModal.addEventListener('click', closeProjectModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeProjectModal();
+    });
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeProjectModal();
+    });
+
+    const menuButton = document.getElementById('menuButton');
+    const mobilePanel = document.getElementById('mobilePanel');
+    menuButton.addEventListener('click', () => {
+      mobilePanel.classList.toggle('open');
+    });
+    mobilePanel.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobilePanel.classList.remove('open'));
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+    const particleCount = 76;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
+      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+    }
+
+    function makeParticle() {
+      return {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
+        r: Math.random() * 1.8 + 0.7,
+        alpha: Math.random() * 0.55 + 0.18
+      };
+    }
+
+    function initParticles() {
+      particles.length = 0;
+      for (let i = 0; i < particleCount; i++) particles.push(makeParticle());
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
+        if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
+
+        const dx = p.x - mouseX;
+        const dy = p.y - mouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          p.x += dx / 120;
+          p.y += dy / 120;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+        ctx.fill();
+      });
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i];
+          const b = particles[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(124,92,255,${(1 - dist / 110) * 0.16})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(drawParticles);
+    }
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      initParticles();
+    });
+    resizeCanvas();
+    initParticles();
+    drawParticles();
+
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+    const sections = [...navLinks].map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        if (window.scrollY >= section.offsetTop - 140) current = '#' + section.id;
+      });
+      navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === current));
+    }, { passive: true });
+  </script>
 </body>
 </html>
