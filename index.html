@@ -348,43 +348,130 @@
       transform-style: preserve-3d;
     }
 
-    .orb {
+    .hero-card::after {
+      content: "";
       position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(5,7,19,0.04), rgba(5,7,19,0.62)),
+        radial-gradient(circle at 50% 18%, rgba(255,255,255,0.16), transparent 24%);
+    }
+
+    .hero-slideshow {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      background:
+        linear-gradient(135deg, rgba(124,92,255,0.22), rgba(0,229,255,0.08)),
+        rgba(5,7,19,0.78);
+      transform: translateZ(25px);
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 32px 32px 170px;
+      opacity: 0;
+      transform: scale(1.025);
+      transition: opacity 850ms ease, transform 1100ms ease;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .hero-slide-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.28;
+      filter: blur(20px) saturate(1.16) contrast(1.05);
+      transform: scale(1.16);
+    }
+
+    .hero-slide-main {
+      position: relative;
+      z-index: 1;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.20);
+      background: rgba(5,7,19,0.34);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.42);
+    }
+
+    .hero-slide-label {
+      position: absolute;
+      top: 28px;
+      left: 28px;
+      z-index: 3;
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: 999px;
-      filter: blur(1px);
-      opacity: 0.88;
-      animation: float 7s ease-in-out infinite;
+      background: rgba(5,7,19,0.58);
+      backdrop-filter: blur(14px);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    .orb.one {
-      width: 210px;
-      height: 210px;
-      background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent), transparent 70%);
-      top: 64px;
-      left: 58px;
+    .hero-slide-dots {
+      position: absolute;
+      right: 28px;
+      top: 30px;
+      z-index: 3;
+      display: flex;
+      gap: 7px;
+      align-items: center;
     }
 
-    .orb.two {
-      width: 170px;
-      height: 170px;
-      background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-2), transparent 70%);
-      right: 56px;
-      bottom: 92px;
-      animation-delay: -2.4s;
+    .hero-slide-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.34);
+      border: 0;
+      padding: 0;
+      transition: width 220ms ease, background 220ms ease;
     }
 
-    .orb.three {
-      width: 92px;
-      height: 92px;
-      background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-3), transparent 70%);
-      right: 80px;
-      top: 96px;
-      animation-delay: -4.2s;
+    .hero-slide-dot.active {
+      width: 22px;
+      background: var(--accent-2);
     }
 
-    @keyframes float {
-      0%, 100% { transform: translate3d(0, 0, 40px) rotate(0deg); }
-      50% { transform: translate3d(10px, -24px, 80px) rotate(14deg); }
+    .hero-slide-empty {
+      position: absolute;
+      inset: 28px 28px 160px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 1px dashed rgba(255,255,255,0.24);
+      border-radius: 28px;
+      background: rgba(255,255,255,0.045);
+      padding: 22px;
+      color: var(--muted);
+    }
+
+    .hero-slide-empty strong {
+      display: block;
+      color: var(--text);
+      font-size: 28px;
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
     }
 
     .glass-panel {
@@ -392,10 +479,11 @@
       inset: auto 34px 34px 34px;
       padding: 22px;
       border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(5,7,19,0.64);
+      background: rgba(5,7,19,0.70);
       backdrop-filter: blur(18px);
       border-radius: 26px;
       transform: translateZ(70px);
+      z-index: 4;
     }
 
     .glass-panel h2 {
@@ -409,28 +497,6 @@
       line-height: 1.65;
       font-size: 15px;
       margin: 0;
-    }
-
-    .mini-grid {
-      position: absolute;
-      top: 42px;
-      right: 34px;
-      display: grid;
-      grid-template-columns: repeat(2, 86px);
-      gap: 12px;
-      transform: translateZ(52px);
-    }
-
-    .mini-tile {
-      height: 86px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.08);
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      color: rgba(255,255,255,0.86);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.2);
     }
 
     section {
@@ -994,14 +1060,15 @@
         min-height: 390px;
         border-radius: 28px;
       }
-      .mini-grid {
-        grid-template-columns: repeat(2, 72px);
+      .hero-slide {
+        padding: 18px 18px 150px;
       }
-      .mini-tile {
-        height: 72px;
+      .hero-slide-label,
+      .hero-slide-dots {
+        top: 18px;
       }
-      .orb.one { width: 155px; height: 155px; }
-      .orb.two { width: 128px; height: 128px; }
+      .hero-slide-label { left: 18px; }
+      .hero-slide-dots { right: 18px; }
       .modal-preview { min-height: 220px; max-height: 66vh; padding: 12px; }
       .modal-preview img,
       .modal-preview video { max-height: calc(66vh - 24px); }
@@ -1079,19 +1146,18 @@
           </div>
         </div>
 
-        <div class="hero-card tilt reveal" aria-label="Interactive visual card">
-          <div class="orb one"></div>
-          <div class="orb two"></div>
-          <div class="orb three"></div>
-          <div class="mini-grid">
-            <div class="mini-tile">LOW</div>
-            <div class="mini-tile">MID</div>
-            <div class="mini-tile">HIGH</div>
-            <div class="mini-tile">SCR</div>
+        <div class="hero-card tilt reveal" aria-label="High poly model slideshow">
+          <div class="hero-slideshow" id="heroSlideshow">
+            <div class="hero-slide-empty">
+              <div>
+                <strong>High-poly showcase</strong>
+                <p>Add <code>images/mhigh1.png</code>, <code>images/mhigh2.png</code>, and more to auto-build this slideshow.</p>
+              </div>
+            </div>
           </div>
           <div class="glass-panel">
-            <h2>Auto-loading portfolio</h2>
-            <p>Upload files using the naming system: mlow, mmid, mhigh, ui, gfx, and scr. The buttons and modal previews are generated automatically.</p>
+            <h2>Best high-poly models</h2>
+            <p>The hero card now rotates through your high-poly model images. Put the strongest pieces first: <strong>mhigh1.png</strong>, <strong>mhigh2.png</strong>, <strong>mhigh3.png</strong>.</p>
           </div>
         </div>
       </div>
@@ -1627,6 +1693,102 @@
       bindCursorHover();
       bindReveals();
       updateProgress();
+      renderHeroSlideshow();
+    }
+
+    let heroSlideIndex = 0;
+    let heroSlideTimer = null;
+
+    function renderHeroSlideshow() {
+      const slideshow = document.getElementById('heroSlideshow');
+      if (!slideshow) return;
+
+      const highPolyItems = state.items
+        .filter(item => item.category === 'model' && item.modelStyle === 'high')
+        .sort((a, b) => a.number - b.number)
+        .slice(0, 8);
+
+      if (heroSlideTimer) {
+        clearInterval(heroSlideTimer);
+        heroSlideTimer = null;
+      }
+
+      slideshow.innerHTML = '';
+
+      if (highPolyItems.length === 0) {
+        slideshow.innerHTML = `
+          <div class="hero-slide-empty">
+            <div>
+              <strong>High-poly showcase</strong>
+              <p>Add <code>images/mhigh1.png</code>, <code>images/mhigh2.png</code>, and more to auto-build this slideshow.</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      highPolyItems.forEach((item, index) => {
+        const slide = document.createElement('button');
+        slide.className = `hero-slide ${index === 0 ? 'active' : ''}`;
+        slide.type = 'button';
+        slide.setAttribute('aria-label', `Open ${item.title}`);
+        slide.addEventListener('click', () => openProjectModal(item));
+
+        const bg = document.createElement('img');
+        bg.className = 'hero-slide-bg';
+        bg.src = item.src;
+        bg.alt = '';
+        bg.setAttribute('aria-hidden', 'true');
+        slide.appendChild(bg);
+
+        const main = document.createElement('img');
+        main.className = 'hero-slide-main';
+        main.src = item.src;
+        main.alt = `${item.title} preview`;
+        slide.appendChild(main);
+
+        const label = document.createElement('div');
+        label.className = 'hero-slide-label';
+        label.textContent = item.title;
+        slide.appendChild(label);
+
+        slideshow.appendChild(slide);
+      });
+
+      if (highPolyItems.length > 1) {
+        const dots = document.createElement('div');
+        dots.className = 'hero-slide-dots';
+        highPolyItems.forEach((_, index) => {
+          const dot = document.createElement('button');
+          dot.className = `hero-slide-dot ${index === 0 ? 'active' : ''}`;
+          dot.type = 'button';
+          dot.setAttribute('aria-label', `Show high-poly model ${index + 1}`);
+          dot.addEventListener('click', (event) => {
+            event.stopPropagation();
+            showHeroSlide(index);
+          });
+          dots.appendChild(dot);
+        });
+        slideshow.appendChild(dots);
+
+        heroSlideTimer = setInterval(() => {
+          const slides = [...slideshow.querySelectorAll('.hero-slide')];
+          if (slides.length < 2) return;
+          showHeroSlide((heroSlideIndex + 1) % slides.length);
+        }, 3200);
+      }
+    }
+
+    function showHeroSlide(index) {
+      const slideshow = document.getElementById('heroSlideshow');
+      if (!slideshow) return;
+      const slides = [...slideshow.querySelectorAll('.hero-slide')];
+      const dots = [...slideshow.querySelectorAll('.hero-slide-dot')];
+      if (!slides.length) return;
+
+      heroSlideIndex = index;
+      slides.forEach((slide, slideIndex) => slide.classList.toggle('active', slideIndex === index));
+      dots.forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === index));
     }
 
     function renderOverview() {
