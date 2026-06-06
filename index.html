@@ -1320,6 +1320,22 @@
       scripting: 40
     };
 
+
+    const SCRIPTING_DETAILS = {
+      1: {
+        title: 'Working Restock System',
+        desc: 'A scripted restock system showing timed item refreshes, clean feedback, and working in-game behavior.'
+      },
+      2: {
+        title: 'Scripting Showcase 02',
+        desc: 'A custom scripted Roblox system shown through gameplay footage.'
+      },
+      3: {
+        title: 'Scripting Showcase 03',
+        desc: 'A custom scripted Roblox system shown through gameplay footage.'
+      }
+    };
+
     const ASSET_GROUPS = [
       {
         key: 'modelLow',
@@ -1561,6 +1577,11 @@
           const checker = group.mediaType === 'video' ? checkVideo : checkImage;
           return checker(src).then(exists => {
             if (!exists) return null;
+
+            const customDetails = group.key === 'scripting' ? SCRIPTING_DETAILS[number] : null;
+            const customTitle = customDetails && customDetails.title ? customDetails.title : null;
+            const customDesc = customDetails && customDetails.desc ? customDetails.desc : null;
+
             return {
               id: `${group.key}-${number}`,
               number,
@@ -1570,8 +1591,8 @@
               mediaType: group.mediaType,
               icon: group.icon,
               tag: group.tag,
-              title: `${group.titlePrefix} ${padNumber(number)}`,
-              desc: group.desc,
+              title: customTitle || `${group.titlePrefix} ${padNumber(number)}`,
+              desc: customDesc || group.desc,
               mediaClass: group.mediaClass
             };
           });
