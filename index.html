@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zeyd | Creative Portfolio</title>
-  <meta name="description" content="Portfolio showcasing 3D models, UI elements, and GFX work." />
+  <title>Fuad | Creative Portfolio</title>
+  <meta name="description" content="Portfolio showcasing Roblox 3D models, UI elements, GFX work, and scripting videos." />
   <style>
     :root {
       --bg: #060816;
@@ -64,7 +64,7 @@
       z-index: -3;
     }
 
-    a, button, .work-card, .filter-pill {
+    a, button, .work-card, .filter-pill, .subfilter-pill {
       cursor: none;
     }
 
@@ -145,6 +145,7 @@
       color: var(--text);
       text-decoration: none;
       padding-left: 10px;
+      white-space: nowrap;
     }
 
     .logo-mark {
@@ -231,6 +232,10 @@
       font-weight: 800;
     }
 
+    .mobile-panel {
+      display: none;
+    }
+
     .hero {
       min-height: calc(100vh - 92px);
       display: grid;
@@ -278,7 +283,7 @@
       font-size: clamp(48px, 8vw, 104px);
       line-height: 0.92;
       letter-spacing: -0.075em;
-      max-width: 880px;
+      max-width: 900px;
     }
 
     .gradient-text {
@@ -458,18 +463,34 @@
 
     .section-copy {
       color: var(--muted);
-      max-width: 470px;
+      max-width: 520px;
       line-height: 1.7;
     }
 
-    .filter-row {
+    .filter-row,
+    .subfilter-row {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin: 14px 0 28px;
+      margin: 14px 0 22px;
     }
 
-    .filter-pill {
+    .subfilter-row {
+      display: none;
+      margin-top: -10px;
+      padding: 12px;
+      border: 1px solid rgba(0,229,255,0.14);
+      background: rgba(0,229,255,0.045);
+      border-radius: 22px;
+    }
+
+    .subfilter-row.open,
+    .subfilter-row.section-subfilters {
+      display: flex;
+    }
+
+    .filter-pill,
+    .subfilter-pill {
       border: 1px solid var(--line);
       color: var(--muted);
       background: rgba(255,255,255,0.055);
@@ -479,15 +500,24 @@
       transition: transform 180ms ease, color 180ms ease, background 180ms ease, border-color 180ms ease;
     }
 
+    .subfilter-pill {
+      padding: 9px 13px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.045);
+    }
+
     .filter-pill:hover,
-    .filter-pill.active {
+    .filter-pill.active,
+    .subfilter-pill:hover,
+    .subfilter-pill.active {
       transform: translateY(-2px);
       color: var(--text);
       border-color: rgba(0,229,255,0.5);
       background: rgba(0,229,255,0.12);
     }
 
-    .work-grid {
+    .work-grid,
+    .horizontal-gallery {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
@@ -514,6 +544,10 @@
       border-color: rgba(0,229,255,0.55);
     }
 
+    .wide-card {
+      min-height: 250px;
+    }
+
     .work-media {
       position: absolute;
       inset: 0;
@@ -522,14 +556,15 @@
         linear-gradient(135deg, rgba(124,92,255,0.76), rgba(0,229,255,0.42));
       transform: scale(1.02);
       transition: transform 400ms ease;
+      z-index: 0;
     }
 
     .work-card:hover .work-media {
       transform: scale(1.08);
     }
 
-
-    .work-image {
+    .work-image,
+    .work-video {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -541,17 +576,22 @@
       filter: saturate(1.04) contrast(1.04);
     }
 
-    .work-card:hover .work-image {
+    .work-card:hover .work-image,
+    .work-card:hover .work-video {
       transform: scale(1.08);
     }
 
-    .work-media {
-      z-index: 0;
-    }
-
-    .work-card.image-loaded .placeholder-icon {
+    .work-card.image-loaded .placeholder-icon,
+    .work-card.video-loaded .placeholder-icon {
       opacity: 0;
     }
+
+    .work-media.model-low { background: radial-gradient(circle at 30% 24%, rgba(255,255,255,0.55), transparent 16%), linear-gradient(135deg, #46d38c, #00e5ff); }
+    .work-media.model-mid { background: radial-gradient(circle at 30% 24%, rgba(255,255,255,0.55), transparent 16%), linear-gradient(135deg, #7c5cff, #00e5ff); }
+    .work-media.model-high { background: radial-gradient(circle at 30% 24%, rgba(255,255,255,0.55), transparent 16%), linear-gradient(135deg, #ff4fd8, #7c5cff); }
+    .work-media.ui { background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.5), transparent 17%), linear-gradient(135deg, #10172f, #7c5cff 48%, #ff4fd8); }
+    .work-media.gfx { background: radial-gradient(circle at 42% 28%, rgba(255,255,255,0.55), transparent 18%), linear-gradient(135deg, #ff4fd8, #7c5cff 42%, #00e5ff); }
+    .work-media.scripting { background: radial-gradient(circle at 32% 22%, rgba(255,255,255,0.50), transparent 18%), linear-gradient(135deg, #0b1024, #00e5ff 48%, #7c5cff); }
 
     .work-media::after {
       content: "";
@@ -562,10 +602,6 @@
       background-size: 26px 26px, 100% 100%;
       opacity: 0.42;
     }
-
-    .work-media.model { background: radial-gradient(circle at 30% 24%, rgba(255,255,255,0.5), transparent 16%), linear-gradient(135deg, #7c5cff, #00e5ff); }
-    .work-media.ui { background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.5), transparent 17%), linear-gradient(135deg, #10172f, #7c5cff 48%, #ff4fd8); }
-    .work-media.gfx { background: radial-gradient(circle at 42% 28%, rgba(255,255,255,0.55), transparent 18%), linear-gradient(135deg, #ff4fd8, #7c5cff 42%, #00e5ff); }
 
     .placeholder-icon {
       position: absolute;
@@ -617,6 +653,22 @@
       font-size: 14px;
     }
 
+    .play-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 4;
+      padding: 8px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(5,7,19,0.62);
+      backdrop-filter: blur(14px);
+      color: var(--text);
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+
     .showcase-section {
       border: 1px solid var(--line);
       background: linear-gradient(180deg, rgba(255,255,255,0.065), rgba(255,255,255,0.025));
@@ -638,15 +690,21 @@
       pointer-events: none;
     }
 
-    .horizontal-gallery {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 22px;
+    .empty-state,
+    .loading-state {
+      display: none;
+      border: 1px dashed rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.04);
+      border-radius: 24px;
+      padding: 20px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-top: 16px;
     }
 
-    .wide-card {
-      min-height: 240px;
+    .empty-state.show,
+    .loading-state.show {
+      display: block;
     }
 
     .about-grid {
@@ -729,7 +787,7 @@
     .contact-box p {
       margin: 18px auto 0;
       color: var(--muted);
-      max-width: 630px;
+      max-width: 650px;
       line-height: 1.75;
       position: relative;
     }
@@ -778,7 +836,7 @@
     }
 
     .modal-card {
-      width: min(900px, 100%);
+      width: min(960px, 100%);
       border: 1px solid var(--line);
       border-radius: 30px;
       background: #080b1b;
@@ -787,9 +845,10 @@
     }
 
     .modal-preview {
-      min-height: 420px;
+      min-height: 460px;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       position: relative;
+      overflow: hidden;
     }
 
     .modal-preview::after {
@@ -804,11 +863,20 @@
       color: rgba(255,255,255,0.23);
     }
 
-
-    .modal-preview.has-image::after {
+    .modal-preview.has-media::after {
       content: "";
-      background: radial-gradient(circle at 50% 20%, rgba(255,255,255,0.16), transparent 34%),
-                  linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.38));
+      background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.38));
+      pointer-events: none;
+    }
+
+    .modal-preview img,
+    .modal-preview video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
     }
 
     .modal-info {
@@ -840,13 +908,15 @@
       font-weight: 900;
     }
 
-    .mobile-panel {
-      display: none;
+    @media (max-width: 1050px) {
+      .nav-actions {
+        display: none;
+      }
     }
 
     @media (max-width: 980px) {
       body { cursor: auto; }
-      a, button, .work-card, .filter-pill { cursor: pointer; }
+      a, button, .work-card, .filter-pill, .subfilter-pill { cursor: pointer; }
       .cursor-dot, .cursor-ring { display: none; }
       .hero-grid,
       .about-grid {
@@ -859,8 +929,7 @@
       .horizontal-gallery {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      nav ul,
-      .nav-actions {
+      nav ul {
         display: none;
       }
       .menu-button {
@@ -938,8 +1007,8 @@
   <header class="shell">
     <div class="nav">
       <a href="#top" class="logo" aria-label="Go to top">
-        <span class="logo-mark"><span>Z</span></span>
-        <span>Zeyd Portfolio</span>
+        <span class="logo-mark"><span>Z&D</span></span>
+        <span>Fuad Portfolio</span>
       </a>
       <nav aria-label="Main navigation">
         <ul>
@@ -947,13 +1016,14 @@
           <li><a href="#models">3D Models</a></li>
           <li><a href="#ui">UI</a></li>
           <li><a href="#gfx">GFX</a></li>
+          <li><a href="#scripting">Scripting</a></li>
           <li><a href="#contact">Links</a></li>
         </ul>
       </nav>
       <div class="nav-actions">
         <!-- Replace these href values with your real links. -->
         <a class="btn" href="https://discord.gg/YOUR-DISCORD-LINK" target="_blank" rel="noopener">Discord</a>
-        <a class="btn primary" href="https://www.roblox.com/users/2036991936/profile" target="_blank" rel="noopener">Roblox</a>
+        <a class="btn primary" href="https://www.roblox.com/users/YOUR_USER_ID/profile" target="_blank" rel="noopener">Roblox</a>
       </div>
       <button class="menu-button" id="menuButton" type="button" aria-label="Open menu">Menu</button>
     </div>
@@ -962,6 +1032,7 @@
       <a href="#models">3D Models</a>
       <a href="#ui">UI Elements</a>
       <a href="#gfx">GFX</a>
+      <a href="#scripting">Scripting</a>
       <a href="https://discord.gg/YOUR-DISCORD-LINK" target="_blank" rel="noopener">Discord</a>
       <a href="https://www.roblox.com/users/YOUR_USER_ID/profile" target="_blank" rel="noopener">Roblox</a>
     </div>
@@ -971,10 +1042,10 @@
     <section class="hero shell">
       <div class="hero-grid">
         <div class="reveal">
-          <div class="eyebrow"><span class="pulse"></span> Roblox creator · 3D · UI · GFX</div>
+          <div class="eyebrow"><span class="pulse"></span> Roblox creator · 3D · UI · GFX · scripting</div>
           <h1>Building clean, playful, <span class="gradient-text">game-ready visuals.</span></h1>
           <p>
-            A portfolio for my 3D models, UI elements, and GFX work. The site is made to feel smooth, interactive, and polished: hover cards, animated sections, particles, filters, and a custom mouse effect.
+            A portfolio for low-poly, mid-poly, and high-poly models, UI elements, GFX pieces, and scripting videos. Add files with the correct names and the gallery builds itself.
           </p>
           <div class="hero-actions">
             <a class="btn primary" href="#work">View my work</a>
@@ -982,11 +1053,11 @@
           </div>
           <div class="stats" aria-label="Portfolio stats">
             <div class="stat">
-              <strong data-count="12">0</strong>
-              <span>Showcase slots</span>
+              <strong id="totalFilesStat" data-count="0">0</strong>
+              <span>Loaded files</span>
             </div>
             <div class="stat">
-              <strong data-count="3">0</strong>
+              <strong data-count="4">0</strong>
               <span>Creative sections</span>
             </div>
             <div class="stat">
@@ -1001,14 +1072,14 @@
           <div class="orb two"></div>
           <div class="orb three"></div>
           <div class="mini-grid">
-            <div class="mini-tile">3D</div>
-            <div class="mini-tile">UI</div>
-            <div class="mini-tile">GFX</div>
-            <div class="mini-tile">FX</div>
+            <div class="mini-tile">LOW</div>
+            <div class="mini-tile">MID</div>
+            <div class="mini-tile">HIGH</div>
+            <div class="mini-tile">SCR</div>
           </div>
           <div class="glass-panel">
-            <h2>Interactive portfolio</h2>
-            <p>Move your mouse over cards to see depth, glow, and motion. Click project cards to open a preview modal.</p>
+            <h2>Auto-loading portfolio</h2>
+            <p>Upload files using the naming system: mlow, mmid, mhigh, ui, gfx, and scr. The buttons and modal previews are generated automatically.</p>
           </div>
         </div>
       </div>
@@ -1020,59 +1091,27 @@
           <div class="section-kicker">Selected work</div>
           <h2 class="section-title">Gallery overview</h2>
         </div>
-        <p class="section-copy">Use the filters to quickly switch between 3D models, UI elements, and GFX. The cards are already wired to images/img1.png through images/img28.png, grouped by category.</p>
+        <p class="section-copy">Click 3D Models to open Low Poly, Mid Poly, and High Poly filters. The gallery scans your folders and only shows files that actually exist.</p>
       </div>
 
       <div class="filter-row reveal" role="group" aria-label="Portfolio filters">
         <button class="filter-pill active" type="button" data-filter="all">All</button>
-        <button class="filter-pill" type="button" data-filter="model">3D Models</button>
+        <button class="filter-pill" type="button" data-filter="model" id="modelFilterButton" aria-expanded="false">3D Models ▾</button>
         <button class="filter-pill" type="button" data-filter="ui">UI Elements</button>
         <button class="filter-pill" type="button" data-filter="gfx">GFX</button>
+        <button class="filter-pill" type="button" data-filter="scripting">Scripting</button>
       </div>
 
-      <div class="work-grid">
-        <article class="work-card tilt reveal" data-category="model" data-title="3D Model 01" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img1.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img1.png" alt="3D model portfolio image 1" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 01</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-
-        <article class="work-card tilt reveal" data-category="model" data-title="3D Model 02" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img2.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img2.png" alt="3D model portfolio image 2" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 02</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-
-        <article class="work-card tilt reveal" data-category="ui" data-title="UI Element 01" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img13.png">
-          <div class="work-media ui"></div>
-          <img class="work-image" src="images/img13.png" alt="UI element portfolio image 13" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">UI</div>
-          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 01</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
-        </article>
-
-        <article class="work-card tilt reveal" data-category="ui" data-title="UI Element 02" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img14.png">
-          <div class="work-media ui"></div>
-          <img class="work-image" src="images/img14.png" alt="UI element portfolio image 14" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">UI</div>
-          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 02</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
-        </article>
-
-        <article class="work-card tilt reveal" data-category="gfx" data-title="GFX Piece 01" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img19.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img19.png" alt="GFX portfolio image 19" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 01</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-
-        <article class="work-card tilt reveal" data-category="gfx" data-title="GFX Piece 02" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img20.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img20.png" alt="GFX portfolio image 20" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 02</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
+      <div class="subfilter-row" id="modelSubfilters" role="group" aria-label="3D model type filters">
+        <button class="subfilter-pill active" type="button" data-model-style="all">All Models</button>
+        <button class="subfilter-pill" type="button" data-model-style="low">Low Poly</button>
+        <button class="subfilter-pill" type="button" data-model-style="mid">Mid Poly</button>
+        <button class="subfilter-pill" type="button" data-model-style="high">High Poly</button>
       </div>
+
+      <div class="loading-state show" id="overviewLoading">Scanning your folders for portfolio files...</div>
+      <div class="work-grid" id="overviewGrid"></div>
+      <div class="empty-state" id="overviewEmpty">No files found yet. Add files like <strong>images/mlow1.png</strong>, <strong>images/ui1.png</strong>, or <strong>videos/scr1.mp4</strong>, then refresh.</div>
     </section>
 
     <section class="shell" id="models">
@@ -1082,82 +1121,16 @@
             <div class="section-kicker">Section 01</div>
             <h2 class="section-title">3D Models</h2>
           </div>
-          <p class="section-copy">3D model screenshots are wired to images/img1.png through images/img12.png.</p>
+          <p class="section-copy">Use <strong>images/mlow1.png</strong>, <strong>images/mmid1.png</strong>, and <strong>images/mhigh1.png</strong>. Increase the number for every extra model.</p>
         </div>
-        <div class="horizontal-gallery">
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 01" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img1.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img1.png" alt="3D model portfolio image 1" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 01</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 02" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img2.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img2.png" alt="3D model portfolio image 2" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 02</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 03" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img3.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img3.png" alt="3D model portfolio image 3" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 03</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 04" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img4.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img4.png" alt="3D model portfolio image 4" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 04</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 05" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img5.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img5.png" alt="3D model portfolio image 5" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 05</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 06" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img6.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img6.png" alt="3D model portfolio image 6" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 06</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 07" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img7.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img7.png" alt="3D model portfolio image 7" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 07</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 08" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img8.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img8.png" alt="3D model portfolio image 8" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 08</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 09" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img9.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img9.png" alt="3D model portfolio image 9" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 09</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 10" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img10.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img10.png" alt="3D model portfolio image 10" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 10</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 11" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img11.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img11.png" alt="3D model portfolio image 11" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 11</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="model" data-title="3D Model 12" data-desc="Roblox-ready 3D model showcase with clean shape language and game-friendly style." data-image="images/img12.png">
-          <div class="work-media model"></div>
-          <img class="work-image" src="images/img12.png" alt="3D model portfolio image 12" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">3D</div>
-          <div class="work-content"><div class="work-tag">3D Model</div><h3>3D Model 12</h3><p>Roblox-ready 3D model showcase with clean shape language and game-friendly style.</p></div>
-        </article>
+        <div class="subfilter-row section-subfilters" role="group" aria-label="Model section filters">
+          <button class="subfilter-pill active" type="button" data-section-model-style="all">All Models</button>
+          <button class="subfilter-pill" type="button" data-section-model-style="low">Low Poly</button>
+          <button class="subfilter-pill" type="button" data-section-model-style="mid">Mid Poly</button>
+          <button class="subfilter-pill" type="button" data-section-model-style="high">High Poly</button>
         </div>
+        <div class="horizontal-gallery" id="modelsGrid"></div>
+        <div class="empty-state" id="modelsEmpty">No model files found. Add <strong>images/mlow1.png</strong>, <strong>images/mmid1.png</strong>, or <strong>images/mhigh1.png</strong>.</div>
       </div>
     </section>
 
@@ -1168,46 +1141,10 @@
             <div class="section-kicker">Section 02</div>
             <h2 class="section-title">UI Elements</h2>
           </div>
-          <p class="section-copy">UI screenshots are wired to images/img13.png through images/img18.png.</p>
+          <p class="section-copy">UI screenshots use <strong>images/ui1.png</strong>, <strong>images/ui2.png</strong>, <strong>images/ui3.png</strong>, and so on.</p>
         </div>
-        <div class="horizontal-gallery">
-        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 01" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img13.png">
-          <div class="work-media ui"></div>
-          <img class="work-image" src="images/img13.png" alt="UI element portfolio image 13" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">UI</div>
-          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 01</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 02" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img14.png">
-          <div class="work-media ui"></div>
-          <img class="work-image" src="images/img14.png" alt="UI element portfolio image 14" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">UI</div>
-          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 02</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 03" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img15.png">
-          <div class="work-media ui"></div>
-          <img class="work-image" src="images/img15.png" alt="UI element portfolio image 15" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">UI</div>
-          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 03</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 04" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img16.png">
-          <div class="work-media ui"></div>
-          <img class="work-image" src="images/img16.png" alt="UI element portfolio image 16" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">UI</div>
-          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 04</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 05" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img17.png">
-          <div class="work-media ui"></div>
-          <img class="work-image" src="images/img17.png" alt="UI element portfolio image 17" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">UI</div>
-          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 05</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="ui" data-title="UI Element 06" data-desc="Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback." data-image="images/img18.png">
-          <div class="work-media ui"></div>
-          <img class="work-image" src="images/img18.png" alt="UI element portfolio image 18" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">UI</div>
-          <div class="work-content"><div class="work-tag">UI Element</div><h3>UI Element 06</h3><p>Interface design screenshot focused on readable layout, strong hierarchy, and polished player feedback.</p></div>
-        </article>
-        </div>
+        <div class="horizontal-gallery" id="uiGrid"></div>
+        <div class="empty-state" id="uiEmpty">No UI files found. Add <strong>images/ui1.png</strong>, then refresh.</div>
       </div>
     </section>
 
@@ -1218,87 +1155,49 @@
             <div class="section-kicker">Section 03</div>
             <h2 class="section-title">GFX</h2>
           </div>
-          <p class="section-copy">GFX images are wired to images/img19.png through images/img28.png.</p>
+          <p class="section-copy">GFX images use <strong>images/gfx1.png</strong>, <strong>images/gfx2.png</strong>, <strong>images/gfx3.png</strong>, and so on.</p>
         </div>
-        <div class="horizontal-gallery">
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 01" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img19.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img19.png" alt="GFX portfolio image 19" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 01</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 02" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img20.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img20.png" alt="GFX portfolio image 20" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 02</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 03" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img21.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img21.png" alt="GFX portfolio image 21" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 03</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 04" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img22.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img22.png" alt="GFX portfolio image 22" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 04</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 05" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img23.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img23.png" alt="GFX portfolio image 23" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 05</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 06" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img24.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img24.png" alt="GFX portfolio image 24" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 06</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 07" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img25.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img25.png" alt="GFX portfolio image 25" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 07</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 08" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img26.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img26.png" alt="GFX portfolio image 26" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 08</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 09" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img27.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img27.png" alt="GFX portfolio image 27" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 09</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
-        <article class="work-card wide-card tilt" data-category="gfx" data-title="GFX Piece 10" data-desc="Rendered promotional artwork and thumbnail-style visual made to catch attention quickly." data-image="images/img28.png">
-          <div class="work-media gfx"></div>
-          <img class="work-image" src="images/img28.png" alt="GFX portfolio image 28" loading="lazy" onload="this.closest('.work-card').classList.add('image-loaded')" onerror="this.remove()">
-          <div class="placeholder-icon">GFX</div>
-          <div class="work-content"><div class="work-tag">GFX</div><h3>GFX Piece 10</h3><p>Rendered promotional artwork and thumbnail-style visual made to catch attention quickly.</p></div>
-        </article>
+        <div class="horizontal-gallery" id="gfxGrid"></div>
+        <div class="empty-state" id="gfxEmpty">No GFX files found. Add <strong>images/gfx1.png</strong>, then refresh.</div>
+      </div>
+    </section>
+
+    <section class="shell" id="scripting">
+      <div class="showcase-section reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Section 04</div>
+            <h2 class="section-title">Scripting Videos</h2>
+          </div>
+          <p class="section-copy">Scripting previews use <strong>videos/scr1.mp4</strong>, <strong>videos/scr2.mp4</strong>, <strong>videos/scr3.mp4</strong>, and so on.</p>
         </div>
+        <div class="horizontal-gallery" id="scriptingGrid"></div>
+        <div class="empty-state" id="scriptingEmpty">No scripting videos found. Add <strong>videos/scr1.mp4</strong>, then refresh.</div>
       </div>
     </section>
 
     <section class="shell" id="about">
-      <div class="about-grid">
-        <div class="about-card reveal">
+      <div class="section-head reveal">
+        <div>
           <div class="section-kicker">About</div>
-          <h3>Focused on Roblox-ready visuals.</h3>
-          <p>I design assets that are readable, stylized, and practical for games. The goal is simple: make visuals that look good and still feel usable inside an actual player experience.</p>
+          <h2 class="section-title">What I make</h2>
         </div>
-        <div class="about-card reveal">
-          <h3>Creative strengths</h3>
+        <p class="section-copy">This site is built for a Roblox creator portfolio: fast preview, clean categories, and visual proof of your work.</p>
+      </div>
+      <div class="about-grid reveal">
+        <div class="about-card">
+          <h3>Creator profile</h3>
+          <p>I create Roblox-ready visuals and systems: models, UI, promotional GFX, and scripting clips that show how my work functions in-game.</p>
+        </div>
+        <div class="about-card">
+          <h3>Categories</h3>
           <ul class="skill-list">
-            <li><strong>3D Modeling</strong><span>low-poly props, stylized scenes</span></li>
-            <li><strong>UI Design</strong><span>buttons, HUDs, shop layouts</span></li>
+            <li><strong>Low Poly</strong><span>clean shapes, optimized props</span></li>
+            <li><strong>Mid Poly</strong><span>balanced detail and performance</span></li>
+            <li><strong>High Poly</strong><span>detailed showcase renders</span></li>
+            <li><strong>UI</strong><span>readable game interfaces</span></li>
             <li><strong>GFX</strong><span>thumbnails, banners, promo art</span></li>
-            <li><strong>Game Feel</strong><span>motion, hover states, clean feedback</span></li>
+            <li><strong>Scripting</strong><span>video proof of systems</span></li>
           </ul>
         </div>
       </div>
@@ -1317,7 +1216,7 @@
   </main>
 
   <footer class="shell">
-    <p>© <span id="year"></span> Zeyd. Built as a clean portfolio website for 3D models, UI, and GFX.</p>
+    <p>© <span id="year"></span> Fuad. Built as a clean portfolio website for 3D models, UI, GFX, and scripting videos.</p>
   </footer>
 
   <div class="modal" id="projectModal" aria-hidden="true" role="dialog" aria-label="Project preview">
@@ -1337,11 +1236,109 @@
     // === Easy edit area ===
     // 1) Replace Discord links: search for YOUR-DISCORD-LINK.
     // 2) Replace Roblox links: search for YOUR_USER_ID.
-    // 3) Put your images into the /images folder using these exact names:
-    //    3D Models: img1.png through img12.png
-    //    UI: img13.png through img18.png
-    //    GFX: img19.png through img28.png
-    // 4) To change text under a photo, edit the card's <h3> title and <p> description.
+    // 3) Upload files using this exact structure:
+    //
+    //    /images/mlow1.png   /images/mlow2.png   /images/mlow3.png
+    //    /images/mmid1.png   /images/mmid2.png   /images/mmid3.png
+    //    /images/mhigh1.png  /images/mhigh2.png  /images/mhigh3.png
+    //    /images/ui1.png     /images/ui2.png     /images/ui3.png
+    //    /images/gfx1.png    /images/gfx2.png    /images/gfx3.png
+    //    /videos/scr1.mp4    /videos/scr2.mp4    /videos/scr3.mp4
+    //
+    // 4) The browser cannot truly read a folder list on GitHub Pages, so this scans
+    //    filenames from 1 up to the limits below and displays the files that load.
+    // 5) If you have more than the limit, increase that category's number.
+
+    const SCAN_LIMITS = {
+      modelLow: 60,
+      modelMid: 60,
+      modelHigh: 60,
+      ui: 60,
+      gfx: 80,
+      scripting: 40
+    };
+
+    const ASSET_GROUPS = [
+      {
+        key: 'modelLow',
+        category: 'model',
+        modelStyle: 'low',
+        mediaType: 'image',
+        icon: 'LOW',
+        tag: 'Low Poly 3D Model',
+        titlePrefix: 'Low Poly Model',
+        desc: 'Low-poly Roblox-ready model with clean shape language and optimized game style.',
+        mediaClass: 'model-low',
+        path: number => `images/mlow${number}.png`
+      },
+      {
+        key: 'modelMid',
+        category: 'model',
+        modelStyle: 'mid',
+        mediaType: 'image',
+        icon: 'MID',
+        tag: 'Mid Poly 3D Model',
+        titlePrefix: 'Mid Poly Model',
+        desc: 'Mid-poly model balancing detail, readability, and performance for Roblox use.',
+        mediaClass: 'model-mid',
+        path: number => `images/mmid${number}.png`
+      },
+      {
+        key: 'modelHigh',
+        category: 'model',
+        modelStyle: 'high',
+        mediaType: 'image',
+        icon: 'HIGH',
+        tag: 'High Poly 3D Model',
+        titlePrefix: 'High Poly Model',
+        desc: 'High-detail model or render built to show polish, form, and presentation quality.',
+        mediaClass: 'model-high',
+        path: number => `images/mhigh${number}.png`
+      },
+      {
+        key: 'ui',
+        category: 'ui',
+        modelStyle: '',
+        mediaType: 'image',
+        icon: 'UI',
+        tag: 'UI Element',
+        titlePrefix: 'UI Element',
+        desc: 'Interface design screenshot focused on readable layout, hierarchy, and player feedback.',
+        mediaClass: 'ui',
+        path: number => `images/ui${number}.png`
+      },
+      {
+        key: 'gfx',
+        category: 'gfx',
+        modelStyle: '',
+        mediaType: 'image',
+        icon: 'GFX',
+        tag: 'GFX',
+        titlePrefix: 'GFX Piece',
+        desc: 'Rendered promotional artwork or thumbnail-style visual designed to catch attention quickly.',
+        mediaClass: 'gfx',
+        path: number => `images/gfx${number}.png`
+      },
+      {
+        key: 'scripting',
+        category: 'scripting',
+        modelStyle: '',
+        mediaType: 'video',
+        icon: 'SCR',
+        tag: 'Scripting Video',
+        titlePrefix: 'Scripting Clip',
+        desc: 'Short gameplay or development video showing a scripted system working in-game.',
+        mediaClass: 'scripting',
+        path: number => `videos/scr${number}.mp4`
+      }
+    ];
+
+    const state = {
+      items: [],
+      overviewFilter: 'all',
+      overviewModelStyle: 'all',
+      modelSectionStyle: 'all'
+    };
 
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
@@ -1366,10 +1363,15 @@
     }
     animateCursor();
 
-    document.querySelectorAll('a, button, .work-card').forEach((item) => {
-      item.addEventListener('mouseenter', () => cursorRing.classList.add('active'));
-      item.addEventListener('mouseleave', () => cursorRing.classList.remove('active'));
-    });
+    function bindCursorHover() {
+      document.querySelectorAll('a, button, .work-card').forEach((item) => {
+        if (item.dataset.cursorBound === 'true') return;
+        item.dataset.cursorBound = 'true';
+        item.addEventListener('mouseenter', () => cursorRing.classList.add('active'));
+        item.addEventListener('mouseleave', () => cursorRing.classList.remove('active'));
+      });
+    }
+    bindCursorHover();
 
     const progressBar = document.getElementById('progressBar');
     function updateProgress() {
@@ -1389,60 +1391,304 @@
       });
     }, { threshold: 0.13 });
 
-    document.querySelectorAll('.reveal').forEach((el, index) => {
-      el.style.transitionDelay = Math.min(index * 40, 260) + 'ms';
-      revealObserver.observe(el);
-    });
+    function bindReveals() {
+      document.querySelectorAll('.reveal').forEach((el, index) => {
+        if (el.dataset.revealBound === 'true') return;
+        el.dataset.revealBound = 'true';
+        el.style.transitionDelay = Math.min(index * 40, 260) + 'ms';
+        revealObserver.observe(el);
+      });
+    }
+    bindReveals();
 
-    const counters = document.querySelectorAll('[data-count]');
+    function animateCounter(el, target) {
+      const duration = 900;
+      const start = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(target * eased);
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         const el = entry.target;
-        const target = Number(el.dataset.count);
-        const duration = 900;
-        const start = performance.now();
-
-        function tick(now) {
-          const progress = Math.min((now - start) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          el.textContent = Math.round(target * eased);
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-        counterObserver.unobserve(el);
+        if (el.dataset.counted === 'true') return;
+        el.dataset.counted = 'true';
+        animateCounter(el, Number(el.dataset.count));
       });
     }, { threshold: 0.8 });
-    counters.forEach(counter => counterObserver.observe(counter));
+    document.querySelectorAll('[data-count]').forEach(counter => counterObserver.observe(counter));
 
-    document.querySelectorAll('.tilt').forEach((card) => {
-      card.addEventListener('mousemove', (event) => {
-        const rect = card.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        const rotateY = ((x / rect.width) - 0.5) * 12;
-        const rotateX = ((y / rect.height) - 0.5) * -12;
-        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-        card.style.setProperty('--mx', (x / rect.width) * 100 + '%');
-        card.style.setProperty('--my', (y / rect.height) * 100 + '%');
-      });
+    function bindTiltCards() {
+      document.querySelectorAll('.tilt').forEach((card) => {
+        if (card.dataset.tiltBound === 'true') return;
+        card.dataset.tiltBound = 'true';
 
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+        card.addEventListener('mousemove', (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          const rotateY = ((x / rect.width) - 0.5) * 12;
+          const rotateX = ((y / rect.height) - 0.5) * -12;
+          card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+          card.style.setProperty('--mx', (x / rect.width) * 100 + '%');
+          card.style.setProperty('--my', (y / rect.height) * 100 + '%');
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+        });
       });
-    });
+    }
+    bindTiltCards();
+
+    function padNumber(number) {
+      return String(number).padStart(2, '0');
+    }
+
+    function checkImage(path) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        let done = false;
+        const finish = (exists) => {
+          if (done) return;
+          done = true;
+          resolve(exists);
+        };
+        img.onload = () => finish(true);
+        img.onerror = () => finish(false);
+        setTimeout(() => finish(false), 5000);
+        img.src = path;
+      });
+    }
+
+    function checkVideo(path) {
+      return new Promise((resolve) => {
+        const video = document.createElement('video');
+        let done = false;
+        const finish = (exists) => {
+          if (done) return;
+          done = true;
+          video.removeAttribute('src');
+          video.load();
+          resolve(exists);
+        };
+        video.preload = 'metadata';
+        video.muted = true;
+        video.onloadedmetadata = () => finish(true);
+        video.onerror = () => finish(false);
+        setTimeout(() => finish(false), 6000);
+        video.src = path;
+        video.load();
+      });
+    }
+
+    async function discoverAssets() {
+      const discovered = [];
+
+      for (const group of ASSET_GROUPS) {
+        const limit = SCAN_LIMITS[group.key] || 30;
+        const checks = Array.from({ length: limit }, (_, index) => {
+          const number = index + 1;
+          const src = group.path(number);
+          const checker = group.mediaType === 'video' ? checkVideo : checkImage;
+          return checker(src).then(exists => {
+            if (!exists) return null;
+            return {
+              id: `${group.key}-${number}`,
+              number,
+              src,
+              category: group.category,
+              modelStyle: group.modelStyle,
+              mediaType: group.mediaType,
+              icon: group.icon,
+              tag: group.tag,
+              title: `${group.titlePrefix} ${padNumber(number)}`,
+              desc: group.desc,
+              mediaClass: group.mediaClass
+            };
+          });
+        });
+
+        const foundInGroup = await Promise.all(checks);
+        discovered.push(...foundInGroup.filter(Boolean));
+      }
+
+      state.items = discovered;
+      renderAllGalleries();
+      updateStats();
+      document.getElementById('overviewLoading').classList.remove('show');
+    }
+
+    function createCard(item, wide = false) {
+      const card = document.createElement('article');
+      card.className = `work-card ${wide ? 'wide-card ' : ''}tilt reveal`;
+      card.dataset.id = item.id;
+      card.dataset.category = item.category;
+      card.dataset.modelStyle = item.modelStyle || '';
+      card.dataset.title = item.title;
+      card.dataset.desc = item.desc;
+      card.dataset.mediaType = item.mediaType;
+      card.dataset.src = item.src;
+      card.dataset.mediaClass = item.mediaClass;
+
+      const mediaBg = document.createElement('div');
+      mediaBg.className = `work-media ${item.mediaClass}`;
+      card.appendChild(mediaBg);
+
+      if (item.mediaType === 'video') {
+        const video = document.createElement('video');
+        video.className = 'work-video';
+        video.src = item.src;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = 'metadata';
+        video.addEventListener('loadeddata', () => card.classList.add('video-loaded'));
+        video.addEventListener('mouseenter', () => video.play().catch(() => {}));
+        card.addEventListener('mouseenter', () => video.play().catch(() => {}));
+        card.addEventListener('mouseleave', () => video.pause());
+        card.appendChild(video);
+
+        const playBadge = document.createElement('div');
+        playBadge.className = 'play-badge';
+        playBadge.textContent = 'VIDEO';
+        card.appendChild(playBadge);
+      } else {
+        const image = document.createElement('img');
+        image.className = 'work-image';
+        image.src = item.src;
+        image.alt = `${item.title} portfolio image`;
+        image.loading = 'lazy';
+        image.onload = () => card.classList.add('image-loaded');
+        image.onerror = () => image.remove();
+        card.appendChild(image);
+      }
+
+      const placeholder = document.createElement('div');
+      placeholder.className = 'placeholder-icon';
+      placeholder.textContent = item.icon;
+      card.appendChild(placeholder);
+
+      const content = document.createElement('div');
+      content.className = 'work-content';
+      content.innerHTML = `
+        <div class="work-tag">${item.tag}</div>
+        <h3>${item.title}</h3>
+        <p>${item.desc}</p>
+      `;
+      card.appendChild(content);
+
+      card.addEventListener('click', () => openProjectModal(item));
+      return card;
+    }
+
+    function renderIntoGrid(gridId, items, emptyId, wide = true) {
+      const grid = document.getElementById(gridId);
+      const empty = document.getElementById(emptyId);
+      grid.innerHTML = '';
+      items.forEach(item => grid.appendChild(createCard(item, wide)));
+      empty.classList.toggle('show', items.length === 0);
+    }
+
+    function renderAllGalleries() {
+      const models = state.items.filter(item => item.category === 'model');
+      const ui = state.items.filter(item => item.category === 'ui');
+      const gfx = state.items.filter(item => item.category === 'gfx');
+      const scripting = state.items.filter(item => item.category === 'scripting');
+
+      const modelSectionItems = state.modelSectionStyle === 'all'
+        ? models
+        : models.filter(item => item.modelStyle === state.modelSectionStyle);
+
+      renderIntoGrid('modelsGrid', modelSectionItems, 'modelsEmpty', true);
+      renderIntoGrid('uiGrid', ui, 'uiEmpty', true);
+      renderIntoGrid('gfxGrid', gfx, 'gfxEmpty', true);
+      renderIntoGrid('scriptingGrid', scripting, 'scriptingEmpty', true);
+      renderOverview();
+      bindTiltCards();
+      bindCursorHover();
+      bindReveals();
+      updateProgress();
+    }
+
+    function renderOverview() {
+      const overviewGrid = document.getElementById('overviewGrid');
+      const overviewEmpty = document.getElementById('overviewEmpty');
+      overviewGrid.innerHTML = '';
+
+      let visible = state.items;
+      if (state.overviewFilter !== 'all') {
+        visible = visible.filter(item => item.category === state.overviewFilter);
+      }
+      if (state.overviewFilter === 'model' && state.overviewModelStyle !== 'all') {
+        visible = visible.filter(item => item.modelStyle === state.overviewModelStyle);
+      }
+
+      visible.forEach(item => overviewGrid.appendChild(createCard(item, false)));
+      overviewEmpty.classList.toggle('show', visible.length === 0);
+    }
+
+    function updateStats() {
+      const totalFilesStat = document.getElementById('totalFilesStat');
+      totalFilesStat.dataset.count = String(state.items.length);
+      totalFilesStat.dataset.counted = 'true';
+      animateCounter(totalFilesStat, state.items.length);
+    }
 
     const filterButtons = document.querySelectorAll('.filter-pill');
-    const workCards = document.querySelectorAll('#work .work-card');
+    const modelSubfilters = document.getElementById('modelSubfilters');
+    const modelFilterButton = document.getElementById('modelFilterButton');
+
     filterButtons.forEach((button) => {
       button.addEventListener('click', () => {
         filterButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-        const filter = button.dataset.filter;
-        workCards.forEach((card) => {
-          const shouldShow = filter === 'all' || card.dataset.category === filter;
-          card.classList.toggle('hide', !shouldShow);
-        });
+
+        state.overviewFilter = button.dataset.filter;
+        if (state.overviewFilter !== 'model') {
+          state.overviewModelStyle = 'all';
+          document.querySelectorAll('[data-model-style]').forEach(btn => btn.classList.toggle('active', btn.dataset.modelStyle === 'all'));
+          modelSubfilters.classList.remove('open');
+          modelFilterButton.setAttribute('aria-expanded', 'false');
+        } else {
+          modelSubfilters.classList.toggle('open');
+          modelFilterButton.setAttribute('aria-expanded', String(modelSubfilters.classList.contains('open')));
+        }
+        renderOverview();
+        bindTiltCards();
+        bindCursorHover();
+        bindReveals();
+      });
+    });
+
+    document.querySelectorAll('[data-model-style]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-model-style]').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        state.overviewFilter = 'model';
+        state.overviewModelStyle = button.dataset.modelStyle;
+        filterButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === 'model'));
+        modelSubfilters.classList.add('open');
+        modelFilterButton.setAttribute('aria-expanded', 'true');
+        renderOverview();
+        bindTiltCards();
+        bindCursorHover();
+        bindReveals();
+      });
+    });
+
+    document.querySelectorAll('[data-section-model-style]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-section-model-style]').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        state.modelSectionStyle = button.dataset.sectionModelStyle;
+        renderAllGalleries();
       });
     });
 
@@ -1452,31 +1698,39 @@
     const modalPreview = document.getElementById('modalPreview');
     const closeModal = document.getElementById('closeModal');
 
-    document.querySelectorAll('.work-card').forEach((card) => {
-      card.addEventListener('click', () => {
-        modalTitle.textContent = card.dataset.title || 'Project preview';
-        modalDesc.textContent = card.dataset.desc || 'Replace this placeholder with your project description.';
-        const category = card.dataset.category || 'model';
-        const imagePath = card.dataset.image;
-        let baseGradient = 'linear-gradient(135deg, #7c5cff, #00e5ff)';
-        if (category === 'ui') baseGradient = 'linear-gradient(135deg, #10172f, #7c5cff 48%, #ff4fd8)';
-        else if (category === 'gfx') baseGradient = 'linear-gradient(135deg, #ff4fd8, #7c5cff 42%, #00e5ff)';
+    function openProjectModal(item) {
+      modalTitle.textContent = item.title || 'Project preview';
+      modalDesc.textContent = item.desc || 'Replace this placeholder with your project description.';
+      modalPreview.innerHTML = '';
+      modalPreview.classList.add('has-media');
+      modalPreview.style.background = 'linear-gradient(135deg, #7c5cff, #00e5ff)';
 
-        modalPreview.classList.toggle('has-image', Boolean(imagePath));
-        modalPreview.style.background = baseGradient;
-        if (imagePath) {
-          modalPreview.style.backgroundImage = `linear-gradient(180deg, rgba(5,7,19,0.02), rgba(5,7,19,0.42)), url("${imagePath}")`;
-          modalPreview.style.backgroundSize = 'cover';
-          modalPreview.style.backgroundPosition = 'center';
-        }
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-      });
-    });
+      if (item.mediaType === 'video') {
+        const video = document.createElement('video');
+        video.src = item.src;
+        video.controls = true;
+        video.autoplay = true;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        modalPreview.appendChild(video);
+        video.play().catch(() => {});
+      } else {
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.title;
+        modalPreview.appendChild(img);
+      }
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
 
     function closeProjectModal() {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
+      modalPreview.innerHTML = '';
+      modalPreview.classList.remove('has-media');
     }
     closeModal.addEventListener('click', closeProjectModal);
     modal.addEventListener('click', (event) => {
@@ -1583,6 +1837,8 @@
       });
       navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === current));
     }, { passive: true });
+
+    discoverAssets();
   </script>
 </body>
 </html>
