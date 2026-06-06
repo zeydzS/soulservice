@@ -1494,7 +1494,10 @@
 
     // Performance controls:
     // Stops scanning after several missing files in a row so the site does not waste time checking hundreds of nonexistent files.
-    const MAX_CONSECUTIVE_MISSES = 5;
+    const MAX_CONSECUTIVE_MISSES = 3;
+
+    // Checks multiple possible files at once instead of waiting on one file at a time.
+    const DISCOVERY_BATCH_SIZE = 6;
 
     // The overview section is a preview. Full category sections still show all loaded work.
     const OVERVIEW_MAX_ITEMS = 12;
@@ -1604,6 +1607,44 @@
       overviewModelStyle: 'all',
       modelSectionStyle: 'all'
     };
+
+    // Real lazy loading: images do not receive a src until they are close to the viewport.
+    function loadLazyMedia(media) {
+      if (!media || media.dataset.lazyLoaded === 'true') return;
+      const src = media.dataset.src;
+      if (!src) return;
+
+      media.dataset.lazyLoaded = 'true';
+      media.src = src;
+    }
+
+    const lazyMediaObserver = 'IntersectionObserver' in window
+      ? new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            loadLazyMedia(entry.target);
+            lazyMediaObserver.unobserve(entry.target);
+          });
+        }, {
+          root: null,
+          rootMargin: '700px 0px',
+          threshold: 0.01
+        })
+      : null;
+
+    function observeLazyMedia(media) {
+      if (!media) return;
+      if (lazyMediaObserver) {
+        lazyMediaObserver.observe(media);
+      } else {
+        loadLazyMedia(media);
+      }
+    }
+
+    function loadHeroSlide(slide) {
+      if (!slide) return;
+      slide.querySelectorAll('[data-src]').forEach(loadLazyMedia);
+    }
 
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
@@ -1801,27 +1842,48 @@
       };
     }
 
-    async function discoverAssets() {
-      const discovered = [];
-      const overviewLoading = document.getElementById('overviewLoading');
+    async function discoverGroupAssets(group) {
+      const found = [];
+      const limit = SCAN_LIMITS[group.key] || 30;
+      let nextNumber = 1;
+      let consecutiveMisses = 0;
 
-      for (const group of ASSET_GROUPS) {
-        const limit = SCAN_LIMITS[group.key] || 30;
-        let consecutiveMisses = 0;
+      while (nextNumber <= limit && consecutiveMisses < MAX_CONSECUTIVE_MISSES) {
+        const batch = [];
 
-        for (let number = 1; number <= limit; number++) {
+        for (let i = 0; i < DISCOVERY_BATCH_SIZE && nextNumber <= limit; i++, nextNumber++) {
+          const number = nextNumber;
           const src = group.path(number);
-          const exists = await checkAsset(src, group.mediaType);
+          batch.push({ number, src });
+        }
 
-          if (!exists) {
+        const checked = await Promise.all(batch.map(async (asset) => {
+          const exists = await checkAsset(asset.src, group.mediaType);
+          return { ...asset, exists };
+        }));
+
+        for (const asset of checked) {
+          if (!asset.exists) {
             consecutiveMisses += 1;
             if (consecutiveMisses >= MAX_CONSECUTIVE_MISSES) break;
             continue;
           }
 
           consecutiveMisses = 0;
-          discovered.push(makePortfolioItem(group, number, src));
+          found.push(makePortfolioItem(group, asset.number, asset.src));
         }
+      }
+
+      return found;
+    }
+
+    async function discoverAssets() {
+      const discovered = [];
+      const overviewLoading = document.getElementById('overviewLoading');
+
+      for (const group of ASSET_GROUPS) {
+        const groupItems = await discoverGroupAssets(group);
+        discovered.push(...groupItems);
 
         // Render category-by-category so visitors see content sooner.
         state.items = [...discovered];
@@ -1863,13 +1925,14 @@
       } else {
         const image = document.createElement('img');
         image.className = 'work-image';
-        image.src = item.src;
+        image.dataset.src = item.src;
         image.alt = `${item.title} portfolio image`;
         image.loading = 'lazy';
         image.decoding = 'async';
         image.onload = () => card.classList.add('image-loaded');
         image.onerror = () => image.remove();
         card.appendChild(image);
+        observeLazyMedia(image);
       }
 
       const placeholder = document.createElement('div');
@@ -1959,7 +2022,7 @@
 
         const bg = document.createElement('img');
         bg.className = 'hero-slide-bg';
-        bg.src = item.src;
+        bg.dataset.src = item.src;
         bg.alt = '';
         bg.loading = 'lazy';
         bg.decoding = 'async';
@@ -1968,11 +2031,13 @@
 
         const main = document.createElement('img');
         main.className = 'hero-slide-main';
-        main.src = item.src;
+        main.dataset.src = item.src;
         main.alt = `${item.title} preview`;
         main.loading = index === 0 ? 'eager' : 'lazy';
         main.decoding = 'async';
         slide.appendChild(main);
+
+        if (index === 0) loadHeroSlide(slide);
 
         const label = document.createElement('div');
         label.className = 'hero-slide-label';
@@ -2014,7 +2079,11 @@
       if (!slides.length) return;
 
       heroSlideIndex = index;
-      slides.forEach((slide, slideIndex) => slide.classList.toggle('active', slideIndex === index));
+      slides.forEach((slide, slideIndex) => {
+        const active = slideIndex === index;
+        slide.classList.toggle('active', active);
+        if (active) loadHeroSlide(slide);
+      });
       dots.forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === index));
     }
 
