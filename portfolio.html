@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>YOUR_NAME.exe — Roblox Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+/* ── TOKENS ─────────────────────────────── */
+:root{
+  --bg:#030508;
+  --surf:#07090f;
+  --text:#9cbdd4;
+  --muted:#2d4a5e;
+  --cyan:#00d9ff;
+  --purple:#9d5cff;
+  --lc:rgba(0,217,255,.09);
+  --gC:rgba(0,217,255,.18);
+  --gP:rgba(157,92,255,.14);
+  --ease:cubic-bezier(.25,.46,.45,.94);
+}
+
+/* ── RESET ──────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:400;overflow-x:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+img{display:block;width:100%;height:100%;object-fit:cover}
+button{cursor:none;font-family:inherit;border:none;background:none}
+input,textarea{font-family:inherit}
+
+/* ── SCANLINES ──────────────────────────── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.07) 3px,rgba(0,0,0,.07) 4px);
+  pointer-events:none;z-index:9001;
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  opacity:.02;pointer-events:none;z-index:9000;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+
+/* ── CURSOR ─────────────────────────────── */
+#cur{position:fixed;width:6px;height:6px;background:var(--cyan);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 8px var(--cyan),0 0 18px var(--gC)}
+#cur-ring{position:fixed;width:28px;height:28px;border:1px solid var(--cyan);pointer-events:none;z-index:9998;transform:translate(-50%,-50%) rotate(45deg);opacity:.4;transition:width .3s,height .3s,border-color .3s,opacity .3s}
+
+/* ── NAV ────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:2rem 5rem;transition:padding .4s,background .4s,backdrop-filter .4s}
+nav.scrolled{padding:1.1rem 5rem;background:rgba(3,5,8,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--lc)}
+.nav-logo{font-family:'Orbitron',monospace;font-size:.72rem;font-weight:900;letter-spacing:.25em;color:var(--cyan);text-shadow:0 0 12px var(--gC)}
+.nav-logo span{color:var(--text);opacity:.4}
+.nav-status{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;color:var(--purple);opacity:.7}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+.nav-links a::before{content:'// ';color:var(--cyan);opacity:.5}
+.nav-links a:hover{color:var(--cyan)}
+
+/* ── HERO ───────────────────────────────── */
+#hero{height:100svh;min-height:600px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:0 5rem 6rem;overflow:hidden}
+#heroCanvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--lc) 1px,transparent 1px),linear-gradient(90deg,var(--lc) 1px,transparent 1px);background-size:60px 60px}
+.hero-fade{position:absolute;inset:0;background:radial-gradient(ellipse 80% 85% at 50% 50%,transparent 25%,var(--bg) 100%)}
+
+/* hero photo frame */
+.hero-frame{position:absolute;right:5%;top:7%;width:32%;height:82%}
+.hf-inner{position:absolute;inset:0;background:rgba(7,9,15,.85);border:1px solid var(--lc);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hf-inner img{display:none}
+.frame-ph{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(0,217,255,.22);text-align:center;line-height:2}
+/* 4 bracket corners using positioned divs */
+.br{position:absolute;width:22px;height:22px;border-color:var(--cyan);border-style:solid;z-index:2;box-shadow:0 0 10px var(--gC)}
+.br-tl{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.br-tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
+.br-bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
+.br-br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+/* scan line animation */
+.scan{position:absolute;width:100%;height:1.5px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.35;top:0;animation:scanMove 3.5s linear infinite}
+@keyframes scanMove{0%{top:0}100%{top:100%}}
+
+/* hero copy */
+.hero-copy{position:relative;z-index:2;max-width:55%}
+.hero-tag{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.22em;color:var(--cyan);margin-bottom:1.4rem;opacity:0;animation:fadeUp .8s .3s both}
+.hero-tag::before{content:'> '}
+
+/* glitch name */
+.hero-name{font-family:'Orbitron',monospace;font-size:clamp(3rem,7.5vw,8.8rem);font-weight:900;line-height:.9;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:2rem;opacity:0;animation:fadeUp 1s .5s both}
+.glyph{position:relative;display:inline-block}
+.glyph::before,.glyph::after{content:attr(data-t);position:absolute;top:0;left:0;width:100%;height:100%}
+.glyph::before{color:var(--cyan);animation:gA 5s infinite 2s;clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%);opacity:0}
+.glyph::after{color:var(--purple);animation:gB 5s infinite 2.1s;clip-path:polygon(0 62%,100% 62%,100% 80%,0 80%);opacity:0}
+@keyframes gA{0%,90%,100%{transform:none;opacity:0}91%{transform:translate(-3px);opacity:.8}93%{transform:translate(3px);opacity:.8}95%{transform:none;opacity:0}}
+@keyframes gB{0%,90%,100%{transform:none;opacity:0}91.5%{transform:translate(3px);opacity:.8}93.5%{transform:translate(-2px);opacity:.8}95%{transform:none;opacity:0}}
+.hero-name em{font-style:normal;color:var(--cyan);text-shadow:0 0 30px var(--gC),0 0 60px rgba(0,217,255,.12)}
+
+.hero-sub{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.2em;color:var(--muted);opacity:0;animation:fadeUp .8s .85s both}
+.blink{color:var(--cyan);animation:blink 1.2s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.hero-scroll{position:absolute;bottom:4.5rem;right:5rem;display:flex;flex-direction:column;align-items:center;gap:.8rem;opacity:0;animation:fadeIn .8s 1.6s both}
+.sc-lbl{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.25em;color:var(--muted);writing-mode:vertical-rl}
+.sc-bar{width:1px;height:50px;background:linear-gradient(to bottom,var(--cyan),transparent);animation:sPulse 2s infinite}
+@keyframes sPulse{0%,100%{transform:scaleY(1);transform-origin:top;opacity:1}50%{transform:scaleY(.4);transform-origin:top;opacity:.3}}
+
+/* ── SHARED LABEL / TITLE ───────────────── */
+.sec-lbl{font-family:'Share Tech Mono',monospace;font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.6rem;display:flex;align-items:center;gap:.8rem}
+.sec-lbl::before{content:'';width:1.8rem;height:1px;background:var(--cyan)}
+.sec-lbl::after{content:'';flex:1;max-width:50px;height:1px;background:var(--lc)}
+.sec-title{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,3.5vw,3.4rem);font-weight:700;line-height:1.15;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2rem}
+.sec-title em{font-style:normal;color:var(--cyan);text-shadow:0 0 20px var(--gC)}
+
+/* ── ABOUT ──────────────────────────────── */
+#about{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;padding:10rem 5rem;position:relative}
+#about::after{content:'';position:absolute;left:50%;top:10%;bottom:10%;width:1px;background:linear-gradient(to bottom,transparent,var(--lc),var(--lc),transparent);pointer-events:none}
+
+.img-wrap{position:relative}
+.img-frame{position:relative;width:100%;aspect-ratio:3/4}
+.img-frame .hf-inner{border-radius:0}
+.img-frame img{display:none}
+.img-deco{position:absolute;bottom:-1.8rem;left:-1.8rem;width:56%;height:56%;border:1px solid rgba(157,92,255,.18);z-index:-1;pointer-events:none}
+
+.about-body{font-size:.9rem;line-height:2.05;color:var(--muted);margin-bottom:3rem;font-weight:400}
+
+/* HUD stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;border-top:1px solid var(--lc);padding-top:2rem}
+.stat{padding:.9rem 1rem;border:1px solid var(--lc);background:rgba(0,217,255,.018);position:relative}
+.stat::before{content:'';position:absolute;top:0;left:0;width:8px;height:8px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan)}
+.stat-key{font-family:'Share Tech Mono',monospace;font-size:.46rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);opacity:.7;margin-bottom:.35rem}
+.stat-val{font-family:'Orbitron',monospace;font-size:1.75rem;font-weight:700;color:#fff;text-shadow:0 0 14px var(--gC)}
+
+/* ── WORK ───────────────────────────────── */
+#work{padding:8rem 0}
+.work-head{padding:0 5rem;margin-bottom:4rem;display:flex;justify-content:space-between;align-items:flex-end}
+.entries{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.14em;color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:260px;gap:1rem;padding:0 5rem}
+.gi:nth-child(1){grid-column:1/6;grid-row:1}
+.gi:nth-child(2){grid-column:6/9;grid-row:1}
+.gi:nth-child(3){grid-column:9/13;grid-row:1/3}
+.gi:nth-child(4){grid-column:1/4;grid-row:2}
+.gi:nth-child(5){grid-column:4/9;grid-row:2}
+.gi:nth-child(6){grid-column:1/7;grid-row:3}
+.gi:nth-child(7){grid-column:7/13;grid-row:3}
+
+.gi{position:relative;overflow:hidden;cursor:none}
+.gi-img{width:100%;height:100%;background:var(--surf);border:1px solid var(--lc);transition:transform .9s var(--ease),border-color .35s;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.gi-img img{display:none}
+.gi-ph{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.16em;color:rgba(0,217,255,.18);text-transform:uppercase}
+.gi .scan{opacity:0;transition:opacity .3s}
+.gi:hover .scan{opacity:.28}
+.gi:hover .gi-img{transform:scale(1.05);border-color:rgba(0,217,255,.35)}
+
+/* bracket corners on hover */
+.gi::before,.gi::after{content:'';position:absolute;width:14px;height:14px;border-color:var(--cyan);border-style:solid;z-index:4;opacity:0;transition:opacity .3s;pointer-events:none}
+.gi::before{top:6px;left:6px;border-width:2px 0 0 2px;box-shadow:-3px -3px 8px var(--gC)}
+.gi::after{bottom:6px;right:6px;border-width:0 2px 2px 0;box-shadow:3px 3px 8px var(--gC)}
+.gi:hover::before,.gi:hover::after{opacity:1}
+
+.gi-over{position:absolute;inset:0;background:linear-gradient(to top,rgba(3,5,8,.92) 0%,rgba(3,5,8,.45) 50%,transparent 100%);opacity:0;transition:opacity .35s;display:flex;align-items:flex-end;padding:1.2rem;z-index:3}
+.gi:hover .gi-over{opacity:1}
+.gi-idx{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.18em;color:var(--cyan);opacity:.7;margin-bottom:.25rem}
+.gi-title{font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem;color:#fff}
+.gi-cat{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+
+/* ── CONTACT ────────────────────────────── */
+#contact{display:grid;grid-template-columns:1fr 1fr;gap:7rem;padding:10rem 5rem;border-top:1px solid var(--lc);position:relative}
+#contact::before{content:'OPEN_CHANNEL.init()';font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:.14em;color:var(--purple);opacity:.28;position:absolute;top:2.8rem;left:50%;transform:translateX(-50%);white-space:nowrap}
+
+.contact-note{font-size:.88rem;line-height:2.05;color:var(--muted);max-width:380px;margin-bottom:3.5rem}
+
+/* social blocks */
+.socials{display:flex;flex-direction:column}
+.slink{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 0;border-bottom:1px solid var(--lc);transition:border-color .3s}
+.slink:hover{border-bottom-color:var(--cyan)}
+.sl-left{display:flex;align-items:center;gap:1.2rem}
+.sl-icon{width:38px;height:38px;border:1px solid var(--lc);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s,background .3s}
+.slink:hover .sl-icon{border-color:var(--cyan);background:rgba(0,217,255,.06)}
+.sl-icon svg{width:17px;height:17px;fill:var(--cyan)}
+.sl-plat{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.28rem;transition:color .3s}
+.slink:hover .sl-plat{color:var(--cyan)}
+.sl-handle{font-family:'Orbitron',monospace;font-size:.88rem;font-weight:500;letter-spacing:.06em;transition:color .3s,text-shadow .3s}
+.slink:hover .sl-handle{color:var(--cyan);text-shadow:0 0 14px var(--gC)}
+.sl-arr{color:var(--cyan);opacity:.55;font-size:.95rem;transition:transform .3s,opacity .3s}
+.slink:hover .sl-arr{transform:translate(3px,-3px);opacity:1}
+
+/* form */
+.cform{display:flex;flex-direction:column;gap:2rem}
+.fg{display:flex;flex-direction:column;gap:.5rem}
+.fl{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);opacity:.8}
+.fi,.ft{background:rgba(0,217,255,.02);border:none;border-bottom:1px solid var(--lc);padding:.85rem .5rem;color:var(--text);font-size:.85rem;outline:none;transition:border-color .3s,background .3s;resize:none;letter-spacing:.04em}
+.fi::placeholder,.ft::placeholder{color:var(--muted);opacity:.6}
+.fi:focus,.ft:focus{border-bottom-color:var(--cyan);background:rgba(0,217,255,.04)}
+.ft{min-height:85px}
+.fsend{align-self:flex-start;padding:.85rem 2.2rem;border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:.57rem;letter-spacing:.22em;text-transform:uppercase;position:relative;overflow:hidden;transition:color .3s}
+.fsend::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateX(-102%);transition:transform .35s var(--ease)}
+.fsend span{position:relative;z-index:1}
+.fsend:hover::before{transform:translateX(0)}
+.fsend:hover{color:var(--bg)}
+
+/* ── FOOTER ─────────────────────────────── */
+footer{display:flex;justify-content:space-between;align-items:center;padding:2.5rem 5rem;border-top:1px solid var(--lc)}
+.ft-name{font-family:'Orbitron',monospace;font-size:.68rem;font-weight:900;letter-spacing:.2em;color:var(--cyan);text-shadow:0 0 10px var(--gC)}
+.ft-sys{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.12em;color:var(--muted)}
+
+/* ── ANIMATIONS ─────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.reveal.vis{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media(max-width:900px){
+  nav{padding:1.4rem 2rem}
+  nav.scrolled{padding:1rem 2rem}
+  .nav-links,.nav-status{display:none}
+  #hero{padding:0 2rem 4rem}
+  .hero-copy{max-width:100%}
+  .hero-frame{display:none}
+  .hero-scroll{right:2rem}
+  #about{grid-template-columns:1fr;padding:6rem 2rem;gap:4rem}
+  #about::after{display:none}
+  .work-head{padding:0 2rem}
+  .grid{padding:0 2rem;grid-template-columns:1fr 1fr;grid-auto-rows:200px}
+  .gi:nth-child(n){grid-column:auto;grid-row:auto}
+  #contact{grid-template-columns:1fr;padding:6rem 2rem;gap:4rem}
+  footer{padding:2rem;flex-direction:column;gap:1rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <!-- ★ REPLACE: YOUR_NAME -->
+  <a href="#hero" class="nav-logo">YOUR_<span>NAME</span>.exe</a>
+  <span class="nav-status">SYS_STATUS: <span style="color:var(--cyan)">ONLINE</span></span>
+  <ul class="nav-links">
+    <li><a href="#about">profile</a></li>
+    <li><a href="#work">builds</a></li>
+    <li><a href="#contact">connect</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────── -->
+<section id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-grid"></div>
+  <div class="hero-fade"></div>
+
+  <!-- ★ REPLACE src="hero.jpg" with your photo filename -->
+  <div class="hero-frame">
+    <div class="br br-tl"></div>
+    <div class="br br-tr"></div>
+    <div class="br br-bl"></div>
+    <div class="br br-br"></div>
+    <div class="hf-inner">
+      <img src="hero.jpg" alt="Your Name"/>
+      <div class="frame-ph">Your photo here<br/><span style="font-size:.42rem;opacity:.4">(replace src="hero.jpg")</span></div>
+      <div class="scan"></div>
+    </div>
+  </div>
+
+  <div class="hero-copy">
+    <!-- ★ REPLACE: your role / specialties -->
+    <p class="hero-tag">ROBLOX_MODEL &nbsp;|&nbsp; HIDDEN_DEVS</p>
+
+    <!-- ★ REPLACE both data-t="..." AND the text inside each span -->
+    <h1 class="hero-name">
+      <span class="glyph" data-t="YOUR">YOUR</span><br>
+      <em class="glyph" data-t="NAME">NAME</em>
+    </h1>
+
+    <!-- ★ REPLACE: your specialties & city -->
+    <p class="hero-sub">GFX &middot; AVATAR MODELING &middot; YOUR CITY &nbsp;<span class="blink">█</span></p>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="sc-bar"></div>
+    <span class="sc-lbl">scroll</span>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─────────────────────────────────── -->
+<section id="about">
+
+  <div class="img-wrap reveal">
+    <div class="img-frame">
+      <div class="br br-tl"></div>
+      <div class="br br-tr"></div>
+      <div class="br br-bl"></div>
+      <div class="br br-br"></div>
+      <div class="hf-inner">
+        <!-- ★ REPLACE src="about.jpg" -->
+        <img src="about.jpg" alt="Your Name"/>
+        <div class="frame-ph">Your portrait here</div>
+        <div class="scan"></div>
+      </div>
+    </div>
+    <div class="img-deco"></div>
+  </div>
+
+  <div>
+    <p class="sec-lbl reveal">PLAYER.PROFILE</p>
+    <!-- ★ REPLACE: your headline -->
+    <h2 class="sec-title reveal d1">BEHIND<br>THE <em>AVATAR</em></h2>
+    <!-- ★ REPLACE: 2–3 sentence bio -->
+    <p class="about-body reveal d2">
+      Write a short bio about yourself right here. Tell people what you do — your Roblox modeling experience, the kind of projects you love, and what makes you stand out. Keep it direct and confident.
+    </p>
+
+    <!-- ★ REPLACE: your actual numbers -->
+    <div class="stats reveal d3">
+      <div class="stat">
+        <div class="stat-key">YEARS_EXP</div>
+        <div class="stat-val">3+</div>
+      </div>
+      <div class="stat">
+        <div class="stat-key">PROJECTS</div>
+        <div class="stat-val">50+</div>
+      </div>
+      <div class="stat">
+        <div class="stat-key">RATING</div>
+        <div class="stat-val">5★</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ─── WORK ──────────────────────────────────── -->
+<section id="work">
+  <div class="work-head">
+    <div>
+      <p class="sec-lbl reveal">BUILD_LOG</p>
+      <h2 class="sec-title reveal d1">SELECTED<br><em>WORK</em></h2>
+    </div>
+    <span class="entries reveal">ENTRIES: 007</span>
+  </div>
+
+  <div class="grid">
+    <!-- ★ REPLACE each src with your actual photo. Update title & category too. -->
+    <div class="gi reveal">
+      <div class="gi-img"><img src="work1.jpg" alt=""/><span class="gi-ph">IMAGE_01</span><div class="scan"></div></div>
+      <div class="gi-over"><div><div class="gi-idx">BUILD_001</div><div class="gi-title">Project Name</div><div class="gi-cat">GFX / Editorial</div></div></div>
+    </div>
+
+    <div class="gi reveal d1">
+      <div class="gi-img"><img src="work2.jpg" alt=""/><span class="gi-ph">IMAGE_02</span><div class="scan"></div></div>
+      <div class="gi-over"><div><div class="gi-idx">BUILD_002</div><div class="gi-title">Project Name</div><div class="gi-cat">Avatar Design</div></div></div>
+    </div>
+
+    <div class="gi reveal d2">
+      <div class="gi-img"><img src="work3.jpg" alt=""/><span class="gi-ph">IMAGE_03</span><div class="scan"></div></div>
+      <div class="gi-over"><div><div class="gi-idx">BUILD_003</div><div class="gi-title">Project Name</div><div class="gi-cat">Character Model</div></div></div>
+    </div>
+
+    <div class="gi reveal d1">
+      <div class="gi-img"><img src="work4.jpg" alt=""/><span class="gi-ph">IMAGE_04</span><div class="scan"></div></div>
+      <div class="gi-over"><div><div class="gi-idx">BUILD_004</div><div class="gi-title">Project Name</div><div class="gi-cat">GFX Render</div></div></div>
+    </div>
+
+    <div class="gi reveal d2">
+      <div class="gi-img"><img src="work5.jpg" alt=""/><span class="gi-ph">IMAGE_05</span><div class="scan"></div></div>
+      <div class="gi-over"><div><div class="gi-idx">BUILD_005</div><div class="gi-title">Project Name</div><div class="gi-cat">Clothing Design</div></div></div>
+    </div>
+
+    <div class="gi reveal">
+      <div class="gi-img"><img src="work6.jpg" alt=""/><span class="gi-ph">IMAGE_06</span><div class="scan"></div></div>
+      <div class="gi-over"><div><div class="gi-idx">BUILD_006</div><div class="gi-title">Project Name</div><div class="gi-cat">Scene Build</div></div></div>
+    </div>
+
+    <div class="gi reveal d1">
+      <div class="gi-img"><img src="work7.jpg" alt=""/><span class="gi-ph">IMAGE_07</span><div class="scan"></div></div>
+      <div class="gi-over"><div><div class="gi-idx">BUILD_007</div><div class="gi-title">Project Name</div><div class="gi-cat">GFX / Promo</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ───────────────────────────────── -->
+<section id="contact">
+
+  <div>
+    <p class="sec-lbl reveal">OPEN_CHANNEL</p>
+    <h2 class="sec-title reveal d1">LET'S<br><em>CONNECT</em></h2>
+    <!-- ★ REPLACE: your availability / note -->
+    <p class="contact-note reveal d2">
+      Available for GFX, avatar modeling, and Roblox game projects. Open to commissions and long-term collabs. Find me on Hidden Devs.
+    </p>
+
+    <div class="socials reveal d3">
+
+      <!-- ★ REPLACE: YOUR_ROBLOX_ID (number in your profile URL) & YourUsername -->
+      <a href="https://www.roblox.com/users/YOUR_ROBLOX_ID/profile" target="_blank" rel="noopener" class="slink">
+        <div class="sl-left">
+          <div class="sl-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.076 0L0 18.924 18.924 24 24 5.076 5.076 0zm8.698 13.548l-3.625-.972.973-3.625 3.624.973-.972 3.624z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="sl-plat">Roblox</div>
+            <div class="sl-handle">YourUsername</div>
+          </div>
+        </div>
+        <span class="sl-arr">↗</span>
+      </a>
+
+      <!-- ★ REPLACE: YOUR_DISCORD_ID & yourname / tag -->
+      <a href="https://discord.com/users/YOUR_DISCORD_ID" target="_blank" rel="noopener" class="slink">
+        <div class="sl-left">
+          <div class="sl-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.014.043.031.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="sl-plat">Discord</div>
+            <!-- ★ REPLACE: your Discord username -->
+            <div class="sl-handle">yourname</div>
+          </div>
+        </div>
+        <span class="sl-arr">↗</span>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="reveal d2">
+    <form class="cform" id="contactForm">
+      <div class="fg">
+        <label class="fl">// Sender Name</label>
+        <input type="text" class="fi" placeholder="Your Roblox username" required/>
+      </div>
+      <div class="fg">
+        <label class="fl">// Discord Tag</label>
+        <input type="text" class="fi" placeholder="yourname" required/>
+      </div>
+      <div class="fg">
+        <label class="fl">// Project Type</label>
+        <input type="text" class="fi" placeholder="GFX, avatar model, scene build..."/>
+      </div>
+      <div class="fg">
+        <label class="fl">// Message</label>
+        <textarea class="ft" placeholder="Describe your project..." required></textarea>
+      </div>
+      <button type="submit" class="fsend" id="sendBtn"><span>SEND_MESSAGE.exe</span></button>
+    </form>
+  </div>
+
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────── -->
+<footer>
+  <!-- ★ REPLACE -->
+  <span class="ft-name">YOUR_NAME.exe</span>
+  <span class="ft-sys">© 2025 &nbsp;·&nbsp; HIDDEN_DEVS &nbsp;·&nbsp; ALL_RIGHTS_RESERVED</span>
+</footer>
+
+<script>
+/* CURSOR */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.gi').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='50px';ring.style.height='50px';ring.style.borderColor='var(--purple)';ring.style.opacity='.28'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='28px';ring.style.height='28px';ring.style.borderColor='var(--cyan)';ring.style.opacity='.4'});
+});
+
+/* HERO PARTICLE NETWORK */
+const canvas=document.getElementById('heroCanvas'),ctx=canvas.getContext('2d');
+let W,H;
+const resize=()=>{W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight};
+resize();window.addEventListener('resize',resize,{passive:true});
+const N=55,D=130,pts=Array.from({length:N},()=>({x:Math.random()*1000,y:Math.random()*700,vx:(Math.random()-.5)*.32,vy:(Math.random()-.5)*.32,r:Math.random()*1.1+.4}));
+function drawNet(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach((p,i)=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(0,217,255,.55)';ctx.fill();
+    for(let j=i+1;j<N;j++){
+      const q=pts[j],d=Math.hypot(p.x-q.x,p.y-q.y);
+      if(d<D){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.strokeStyle=`rgba(0,217,255,${(1-d/D)*.16})`;ctx.lineWidth=.55;ctx.stroke()}
+    }
+  });
+  requestAnimationFrame(drawNet);
+}
+drawNet();
+
+/* NAV */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>80),{passive:true});
+
+/* SCROLL REVEAL */
+const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* FORM */
+document.getElementById('contactForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const btn=document.getElementById('sendBtn');
+  btn.querySelector('span').textContent='SENT ✓';btn.style.background='var(--cyan)';btn.style.color='var(--bg)';
+  setTimeout(()=>{btn.querySelector('span').textContent='SEND_MESSAGE.exe';btn.style.background='';btn.style.color='var(--cyan)';e.target.reset()},3000);
+});
+</script>
+
+<!--
+═══════════════════════════════════════════════════════════
+  HOW TO PERSONALISE
+═══════════════════════════════════════════════════════════
+
+  1. NAME — search for "YOUR NAME" / "YOUR_NAME" and replace everywhere.
+
+  2. PHOTOS — put your images in the SAME folder as this file:
+       hero.jpg    main full-body photo (right side of hero)
+       about.jpg   portrait for About section
+       work1.jpg … work7.jpg   your portfolio / GFX shots
+
+  3. STATS — update years, projects, rating in the About section.
+
+  4. ROBLOX LINK:
+       Find your numeric user ID in your Roblox profile URL
+       (e.g. roblox.com/users/123456789/profile)
+       Replace YOUR_ROBLOX_ID and YourUsername.
+
+  5. DISCORD LINK:
+       Go to Discord → Settings → Advanced → Enable Developer Mode
+       Right-click your own username → Copy User ID
+       Replace YOUR_DISCORD_ID and yourname.
+
+  6. DEPLOY FREE IN 60 SECONDS:
+       → https://app.netlify.com/drop
+       → Drag the ENTIRE FOLDER (this file + all photos)
+       → Instant live link like yourname.netlify.app
+
+═══════════════════════════════════════════════════════════
+-->
+</body>
+</html>
